@@ -1,0 +1,22 @@
+{% extends "base.html" %} {% load static %} {% block title %}Login{% endblock %}
+{% block content %}
+<h1 class="text-center mb-4 display-2 heading">Login</h1>
+
+<br /><br />
+<div class="d-flex justify-content-center">
+  <!-- Add d-flex and justify-content-center classes -->
+  <div class="form-group mx-auto text-center">
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <button class="btn btn-primary button" type="submit">Login</button>
+      <br /><br />
+      <h6>
+        Don't have an account?
+        <a href="{% url 'userauth:register' %}" class="register-link-style"
+          >Register With Us</a
+        >
+      </h6>
+    </form>
+  </div>
+</div>
+{% endblock %}

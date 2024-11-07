@@ -68,13 +68,26 @@
               >
             </li>
             <li class="nav-item">
-              <a class="btn btn-outline-secondary" href="#">Logout</a>
+              <a
+                href="{% url 'userauth:login' %}"
+                class="btn btn-primary button ms-auto button-margin"
+                >Login</a
+              >
             </li>
           </ul>
         </div>
       </div>
     </nav>
-
+    <script>
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", function () {
+          var myModal = new bootstrap.Modal(
+            document.getElementById("logoutModal")
+          );
+          myModal.show();
+        });
+    </script>
     <div class="content-wrapper container mt-4">
       {% block content %}{% endblock %}
     </div>
