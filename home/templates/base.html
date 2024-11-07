@@ -22,7 +22,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{% url 'home:home' %}">
           <img
             src="{% static 'images/logo.png' %}"
             alt="Logo"
@@ -45,21 +45,27 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" href="#">Home</a>
+              <a class="nav-link active" href="{% url 'home:home' %}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Classes</a>
+              <a class="nav-link" href="{% url 'classes:classes' %}">Classes</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Workouts</a>
+              <a class="nav-link" href="{% url 'workouts:workouts' %}"
+                >Workouts</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Community</a>
+              <a class="nav-link" href="{% url 'community:community' %}"
+                >Community</a
+              >
             </li>
           </ul>
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="#">My Classes</a>
+              <a class="nav-link" href="{% url 'classes:classes' %}"
+                >My Classes</a
+              >
             </li>
             <li class="nav-item">
               <a class="btn btn-outline-secondary" href="#">Logout</a>
