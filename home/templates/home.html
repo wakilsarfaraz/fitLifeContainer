@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% load static %} {% block title %}Welcome to
+FitLife{% endblock %} {% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center py-5 hero-section-bg">
+  <div class="container">
+    <h1 class="display-4">Welcome to FitLife</h1>
+    <p class="lead">Your fitness journey starts here</p>
+    <p>Get inspired and stay healthy</p>
+  </div>
+</section>
+
+<!-- Combined Content Section -->
+<section class="combined-section py-5">
+  <div class="container">
+    <div class="row text-center">
+      <!-- Classes Column -->
+      <div class="col-md-4 mb-4 column classes-column">
+        <img
+          src="{% static 'images/workouts.png' %}"
+          alt="Classes"
+          class="img-fluid mb-3"
+        />
+        <h2>Our Classes</h2>
+        <p class="text-muted">Browse our classes and book one.</p>
+        <a href="#" class="btn btn-light">Learn More</a>
+      </div>
+
+      <!-- Workouts Column -->
+      <div class="col-md-4 mb-4 column workouts-column">
+        <img
+          src="{% static 'images/workouts.png' %}"
+          alt="Workouts"
+          class="img-fluid mb-3"
+        />
+        <h2>Workouts</h2>
+        <p>Workouts for everyone.</p>
+        <a href="#" class="btn btn-light">Learn More</a>
+      </div>
+
+      <!-- Community Column -->
+      <div class="col-md-4 mb-4 column community-column">
+        <img
+          src="{% static 'images/workouts.png' %}"
+          alt="Community"
+          class="img-fluid mb-3"
+        />
+        <h2>Community</h2>
+        <p class="text-muted">Join our community and stay connected.</p>
+        <a href="#" class="btn btn-light">Learn More</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
