@@ -1,2 +1,32 @@
-{% extends "base.html" %} {% load static %} {% block title %}Browse Workouts{%
-endblock %} {% endblock %}
+{% extends 'base.html' %} {% block content %}
+<h1>Our Classes</h1>
+<div class="row">
+  {% for class in classes %}
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <img
+        src="{{ class.image.url }}"
+        class="card-img-top"
+        alt="{{ class.name }}"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{ class.name }}</h5>
+        <p class="card-text">{{ class.description }}</p>
+        <p>Date: {{ class.date }}, Time: {{ class.time }}</p>
+        {% if user.is_authenticated %}
+        <a
+          href="{% url 'classes:add_to_my_classes' class.id %}"
+          class="btn btn-primary"
+          >Add to My Classes</a
+        >
+        {% else %}
+        <a href="{% url 'userauth:login' %}" class="btn btn-primary"
+          >Login to Add</a
+        >
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

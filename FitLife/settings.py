@@ -16,6 +16,8 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 LOGIN_REDIRECT_URL ='/'
 LOGOUT_REDIRECT_URL ='/'
+AUTH_USER_MODEL = 'auth.User'
+ACCOUNT_UNIQUE_EMAIL = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/

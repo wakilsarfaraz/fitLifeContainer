@@ -1,17 +1,30 @@
-from django.contrib import messages
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
+from django.contrib.auth.views import LogoutView
 from django.views import generic
 from django.urls import reverse_lazy
-from django.contrib.auth.views import LogoutView
 from .forms import CustomUserCreationForm
-
-class CustomLogoutView(LogoutView):
-    next_page = '/'  # Redirect to homepage after logout
 
 class UserRegistrationView(generic.CreateView):
     form_class = CustomUserCreationForm
     template_name = 'registration/register.html'
-    success_url = reverse_lazy('userauth:login')  # Redirect to login after successful registration
+    success_url = reverse_lazy('userauth:login')
 
     def form_valid(self, form):
-        messages.success(self.request, "Your account has been created successfully! You can now log in.")
-        return super().form_valid(form)
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
+
+class CustomLogoutView(LogoutView):
+    next_page = '/' 
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})

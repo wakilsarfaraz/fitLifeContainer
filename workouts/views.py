@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from .models import Workout
 
-# Create your views here.
 def workouts_view(request):
-    return render(request,"workouts.html")
+    workouts = Workout.objects.all()
+    categories = Workout.objects.values_list('category', flat=True).distinct()
+    return render(request, 'workouts.html', {'workouts': workouts, 'categories': categories})
