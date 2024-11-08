@@ -175,3 +175,10 @@ footer p {
   justify-content: center;
   align-items: center;
 }
+
+/* Active Category Style */
+.active-category {
+  color: white !important; /* Ensure color override */
+  background-color: #007bff !important; /* Active background */
+  border-color: #007bff !important; /* Active border */
+}

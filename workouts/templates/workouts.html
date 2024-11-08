@@ -15,20 +15,28 @@
   </div>
 </div>
 
+<!-- Categories Section -->
 <div class="mb-3">
+  <!-- "All" button as the first button -->
+  <button
+    class="btn btn-outline-primary me-2"
+    onclick="filterWorkouts(this, 'all')"
+  >
+    All
+  </button>
+
+  <!-- Dynamically generated category buttons -->
   {% for category in categories %}
   <button
     class="btn btn-outline-primary me-2"
-    onclick="filterWorkouts('{{ category }}')"
+    onclick="filterWorkouts(this, '{{ category }}')"
   >
     {{ category }}
   </button>
   {% endfor %}
-  <button class="btn btn-outline-primary" onclick="filterWorkouts('all')">
-    All
-  </button>
 </div>
 
+<!-- Workouts Section -->
 <div class="row" id="workouts-container">
   {% for workout in workouts %}
   <div
@@ -64,8 +72,17 @@
   {% endfor %}
 </div>
 
+<!-- JavaScript -->
 <script>
-  function filterWorkouts(category) {
+  function filterWorkouts(button, category) {
+    // Remove 'active-category' class from all buttons
+    const buttons = document.querySelectorAll(".btn-outline-primary");
+    buttons.forEach((btn) => btn.classList.remove("active-category"));
+
+    // Add 'active-category' class to the clicked button
+    button.classList.add("active-category");
+
+    // Show or hide workouts based on the category
     const workouts = document.getElementsByClassName("workout-item");
     for (let workout of workouts) {
       if (category === "all" || workout.dataset.category === category) {
