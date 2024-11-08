@@ -3,10 +3,8 @@ html,
 body {
   height: 100%;
   margin: 0;
-  display: flex;
-  flex-direction: column;
   font-family: "Arial", sans-serif;
-  background-color: #f8f9fa;
+  background-color: #f5f5f5;
 }
 
 .content-wrapper {
@@ -15,7 +13,7 @@ body {
 
 /* Navbar Styles */
 .navbar {
-  padding: 1rem;
+  padding: 1rem 2rem;
   background-color: #ffffff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -28,7 +26,7 @@ body {
 .navbar-nav .nav-link {
   font-size: 1.1rem;
   font-weight: 500;
-  color: #555;
+  color: #343a40;
 }
 
 .navbar-nav .nav-link.active {
@@ -48,85 +46,97 @@ body {
 
 /* Hero Section */
 .hero-section {
-  width: 100vw; /* Full viewport width */
-  padding: 80px 20px; /* Adjust padding for better visibility */
-  background-color: #f5f5f5;
+  width: 100%;
+  padding: 80px 0;
+  background-color: #e0f7fa;
   text-align: center;
-  position: relative; /* So the background image can cover the whole section */
+  position: relative;
 }
 
 .hero-section-bg {
-  background-image: url("../images/hero-bg.png");
+  background-image: url("/static/images/hero-bg.png");
   background-size: cover;
   background-position: center;
-  height: 30%; /* Ensures full height of the hero section */
-  width: 100%; /* Full width */
+  height: 40vh;
+  width: 100%;
 }
 
 .hero-section h1,
 .hero-section p {
-  color: black;
+  color: #343a40;
   z-index: 1;
   position: relative;
+  margin: 0;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+}
+
+.hero-section p {
+  font-size: 1.25rem;
+  margin-top: 20px;
 }
 
 /* Combined Content Section */
 .combined-section {
-  background-color: #f8f9fa;
-  padding: 3rem 0;
-  display: flex;
-  justify-content: center; /* Centers the section horizontally */
-  align-items: center; /* Centers the content vertically */
-  flex-wrap: wrap; /* Allows columns to wrap on smaller screens */
-  gap: 20px; /* Adds space between columns */
+  background-color: #f5f5f5;
+  padding: 4rem 0;
 }
 
 .column {
-  width: 30%; /* Default width of each column */
   padding: 2rem;
-  color: white;
+  background-color: #ffffff;
   border-radius: 8px;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
 }
 
 .column:hover {
-  transform: scale(1.05); /* Slightly enlarges the column on hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 .classes-column {
-  background-color: #6c757d;
+  background-color: #21565c;
 }
 
 .workouts-column {
-  background-color: #dc3545;
+  background-color: #ce5100;
 }
 
 .community-column {
-  background-color: #007bff;
+  background-color: #21565c;
 }
 
 .column img {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
+  margin-bottom: 20px;
 }
 
 .column h2 {
-  margin-top: 1rem;
-  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  font-size: 1.75rem;
+  color: #fff;
 }
 
 .column p {
   margin-bottom: 1.5rem;
+  color: #fff;
 }
 
 .column .btn {
   color: white;
   background-color: rgba(255, 255, 255, 0.3);
   border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1rem;
+  text-transform: uppercase;
 }
 
 .column .btn:hover {
@@ -134,31 +144,9 @@ body {
 }
 
 /* Responsive Styles */
-
-/* Medium to large screen: use flexbox for the columns */
-@media (min-width: 768px) {
-  .column {
-    width: 30%; /* Each column will take up 30% width on medium to large screens */
-  }
-}
-
-/* Small screens: stack the columns vertically */
-@media (max-width: 767px) {
-  .combined-section {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .column {
-    width: 80%; /* On smaller screens, each column will take 80% of the container width */
-    margin-bottom: 20px; /* Adds space between stacked columns */
-  }
-}
-
-/* Hero Section: Responsive Text */
 @media (max-width: 768px) {
   .hero-section h1 {
-    font-size: 2.5rem; /* Adjust font size for smaller screens */
+    font-size: 2.5rem;
   }
 
   .hero-section p {
@@ -168,7 +156,7 @@ body {
 
 /* Footer Styling */
 footer {
-  background-color: #f8f9fa;
+  background-color: #f5f5f5;
   padding: 20px 0;
   text-align: center;
 }
@@ -176,5 +164,5 @@ footer {
 footer p {
   margin-bottom: 0;
   font-size: 0.875rem;
-  color: #555;
+  color: #343a40;
 }
