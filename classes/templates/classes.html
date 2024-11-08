@@ -1,9 +1,20 @@
 {% extends 'base.html' %} {% block content %}
-<h1>Our Classes</h1>
+<!-- Title Section -->
+<div class="d-flex justify-content-center section-header align-items-center">
+  <div>
+    <h1>Our Classes</h1>
+    <p>
+      Explore our wide range of fitness classes and find the one that fits you
+      best. Join us and start your fitness journey today!
+    </p>
+  </div>
+</div>
+
+<!-- Classes Section -->
 <div class="row">
   {% for class in classes %}
   <div class="col-md-4 mb-4">
-    <div class="card">
+    <div class="card col-10">
       <img
         src="{{ class.image.url }}"
         class="card-img-top img-fluid"
@@ -12,7 +23,7 @@
       <div class="card-body">
         <h5 class="card-title">{{ class.name }}</h5>
         <p class="card-text">{{ class.description }}</p>
-        <p>Date: {{ class.date }}, Time: {{ class.time }}</p>
+        <p>Time: {{ class.time }}</p>
         {% if user.is_authenticated %}
         <a
           href="{% url 'classes:my_classes' class.id %}"

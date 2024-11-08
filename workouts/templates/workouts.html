@@ -1,5 +1,20 @@
 {% extends 'base.html' %} {% block content %}
-<h1>Workouts</h1>
+<div class="d-flex justify-content-center section-header align-items-center">
+  <div>
+    <h1>Workouts</h1>
+    <p>
+      Explore our wide range of fitness classes and find the one that fits you
+      best. Join us and start your fitness journey today! Whether you're looking
+      to build strength, improve flexibility, or enhance your cardiovascular
+      fitness, we have something for everyone. Choose from a variety of workout
+      types and get started on the path to a healthier, stronger you. Each
+      workout is carefully crafted by professionals to suit all levels, from
+      beginners to advanced fitness enthusiasts. Start your workout journey
+      today and see the difference!
+    </p>
+  </div>
+</div>
+
 <div class="mb-3">
   {% for category in categories %}
   <button
@@ -13,6 +28,7 @@
     All
   </button>
 </div>
+
 <div class="row" id="workouts-container">
   {% for workout in workouts %}
   <div
@@ -23,12 +39,25 @@
       <div class="card-body">
         <h5 class="card-title">{{ workout.title }}</h5>
         <p class="card-text">{{ workout.description }}</p>
+
+        <!-- Video Thumbnail -->
+        <div class="thumbnail-container">
+          <img
+            src="https://img.youtube.com/vi/{{ workout.video_id }}/0.jpg"
+            alt="Video Thumbnail"
+            class="img-fluid"
+            style="cursor: pointer"
+          />
+        </div>
+
+        <!-- Button to Watch Video on YouTube -->
         <a
           href="{{ workout.youtube_url }}"
           class="btn btn-primary"
           target="_blank"
-          >Watch Video</a
         >
+          Watch Video
+        </a>
       </div>
     </div>
   </div>
