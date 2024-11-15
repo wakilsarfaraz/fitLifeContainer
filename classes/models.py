@@ -13,7 +13,7 @@ class FitnessClass(models.Model):
         ('Saturday', 'Saturday'),
         ('Sunday', 'Sunday'),
     ])
-    time = models.TimeField()
+    time = models.TimeField(null=True, blank=True)  
     image = models.ImageField(upload_to='images/')
 
     def __str__(self):

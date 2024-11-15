@@ -1,8 +1,20 @@
-# templates/community/add_post.html {% extends 'base.html' %} {% block content
-%}
-<h1>Add New Post</h1>
-<form method="post">
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Add Post</button>
-</form>
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <h1 class="text-center mb-4 text-center display-2 heading">
+    Share Your Progress
+  </h1>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">{{ form.subject.label_tag }} {{ form.subject }}</div>
+        <div class="mb-3">
+          {{ form.description.label_tag }} {{ form.description }}
+        </div>
+        <div class="mb-3">{{ form.image.label_tag }} {{ form.image }}</div>
+        <button class="btn btn-primary button" type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -1,17 +1,67 @@
 {% extends 'base.html' %} {% block content %}
-<h1>Community</h1>
+<!-- Hero Section -->
+<section class="section-header text-center py-5 bg-light">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="text-center text-md-center">
+        <h1 class="display-4">Join the Fitness Community</h1>
+        <p class="lead">
+          Join our fitness community to share progress, advice, and tips with
+          others. Whether you're celebrating milestones or looking for
+          motivation, this space is dedicated to supporting one another on our
+          fitness journeys. Share your experiences, learn from others, and stay
+          inspired!
+        </p>
+        <p>
+          Our community is here to help you stay committed and achieve your
+          fitness goals. Ask questions, offer advice, and find new ways to push
+          yourself. We are stronger together—let's build a healthy, supportive
+          environment!
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Add Post Button (Only visible to authenticated users) -->
 {% if user.is_authenticated %}
-<a href="{% url 'community:add_post' %}" class="btn btn-primary">Add Post</a>
-{% endif %} {% for post in posts %}
-<div class="card mb-3">
-  <div class="card-body">
-    <h5 class="card-title">{{ post.title }}</h5>
-    <p class="card-text">{{ post.content }}</p>
-    <p class="card-text">
-      <small class="text-muted"
-        >Added by: {{ post.author.username }} on {{ post.created_at }}</small
-      >
-    </p>
+<div class="text-center my-4">
+  <a href="{% url 'community:add_post' %}" class="btn btn-lg btn-primary"
+    >Add a New Post</a
+  >
+</div>
+{% endif %}
+
+<!-- Posts Section -->
+<div class="container py-5">
+  <div class="row">
+    {% for post in posts %}
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm">
+        {% if post.image %}
+        <img
+          src="{{ post.image.url }}"
+          class="card-img-top"
+          alt="{{ post.subject }}"
+        />
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ post.subject }}</h5>
+          <p class="card-text">{{ post.description|truncatewords:20 }}</p>
+          <p class="card-text">
+            <small class="text-muted"
+              >Added by: {{ post.user_id }} on {{ post.date }}</small
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <p class="text-center">No posts yet. Be the first to share something!</p>
+    </div>
+    {% endfor %}
   </div>
 </div>
-{% endfor %} {% endblock %}
+
+{% endblock %}

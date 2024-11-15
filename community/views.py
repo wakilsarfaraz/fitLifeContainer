@@ -1,21 +1,32 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.views.generic import ListView, CreateView
 from .models import Post
 from .forms import PostForm
+from django.urls import reverse_lazy
 
-def community_view(request):
-    posts = Post.objects.all().order_by('-created_at')
-    return render(request, 'community.html', {'posts': posts})
+# ListView to display all posts
+class PostView(ListView):
+   model = Post
+   template_name = 'community.html'
+   context_object_name = 'posts'  # This changes the default 'object_list' to 'posts'
 
-@login_required
-def add_post(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('community:community')
-    else:
-        form = PostForm()
-    return render(request, 'add_post.html', {'form': form})
+   def get_context_data(self, **kwargs):
+       context = super().get_context_data(**kwargs)
+       context['user'] = self.request.user  # Add the current user to the context
+       return context
+
+# CreateView to handle the creation of a new post
+class AddPostView(CreateView):
+   model = Post
+   template_name = 'add_post.html'
+   form_class = PostForm
+   success_url = reverse_lazy('community:community')
+
+   def form_valid(self, form):
+      self.object = form.save(commit=False)
+      if self.request.user.is_authenticated:
+          self.object.user = self.request.user
+      else:
+        self.object.user = None
+      self.object.save()
+      return super().form_valid(form)
