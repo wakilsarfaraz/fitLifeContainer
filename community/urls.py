@@ -1,10 +1,12 @@
+# community/urls.py
+
 from django.urls import path
-from .views import AddPostView
-from .views import PostView
-from django.conf import settings
-from django.conf.urls.static import static
+from . import views
+
 app_name = 'community'
+
 urlpatterns = [
-    path('',PostView.as_view(),name='community'),
-    path('add_post/',AddPostView.as_view(), name='add_post'),
-]+ static (settings.MEDIA_URL, document_root =settings.MEDIA_ROOT)
+    path('', views.PostView.as_view(), name='community'),  # List all posts
+    path('add/', views.AddPostView.as_view(), name='add_post'),  # Add new post
+    path('like/<int:post_id>/', views.like_post, name='like_post'),  # Like/unlike post
+]

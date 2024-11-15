@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'workouts',
     'community',
     'userauth',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

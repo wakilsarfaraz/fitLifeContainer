@@ -171,3 +171,26 @@ footer p {
   background-color: #007bff !important; /* Active background */
   border-color: #007bff !important; /* Active border */
 }
+
+.bg-gradient {
+  background: linear-gradient(
+    to right,
+    #00c6ff,
+    #0072ff
+  ); /* Gradient background */
+}
+
+.btn-primary {
+  background-color: #0072ff; /* Matching button color */
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #005bb5; /* Darker shade for hover */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.transform-hover:hover {
+  transform: translateY(-3px); /* Subtle lift on hover */
+}

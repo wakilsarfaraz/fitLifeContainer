@@ -1,19 +1,51 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} {% load widget_tweaks %} {% block content %}
 <div class="container mt-5">
-  <h1 class="text-center mb-4 text-center display-2 heading">
-    Share Your Progress
-  </h1>
   <div class="row justify-content-center">
-    <div class="col-md-8">
-      <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="mb-3">{{ form.subject.label_tag }} {{ form.subject }}</div>
-        <div class="mb-3">
-          {{ form.description.label_tag }} {{ form.description }}
+    <!-- Adjusted the column size to make it narrower -->
+    <div class="col-lg-6">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-primary text-white text-center py-4">
+          <!-- Added custom class for title size adjustment -->
+          <h3 class="fw-bold mb-0 custom-title">Share Your Progress</h3>
         </div>
-        <div class="mb-3">{{ form.image.label_tag }} {{ form.image }}</div>
-        <button class="btn btn-primary button" type="submit">Submit</button>
-      </form>
+        <div class="card-body p-5">
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-4">
+              <label
+                for="{{ form.subject.id_for_label }}"
+                class="form-label fw-bold"
+              >
+                {{ form.subject.label }}
+              </label>
+              {{ form.subject|add_class:"form-control form-control-sm" }}
+            </div>
+            <div class="mb-4">
+              <label
+                for="{{ form.description.id_for_label }}"
+                class="form-label fw-bold"
+              >
+                {{ form.description.label }}
+              </label>
+              {{ form.description|add_class:"form-control form-control-sm" }}
+            </div>
+            <div class="mb-4">
+              <label
+                for="{{ form.image.id_for_label }}"
+                class="form-label fw-bold"
+              >
+                {{ form.image.label }}
+              </label>
+              {{ form.image|add_class:"form-control form-control-sm" }}
+            </div>
+            <div class="d-grid">
+              <button class="btn btn-primary btn-lg" type="submit">
+                Share Your Progress
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>
