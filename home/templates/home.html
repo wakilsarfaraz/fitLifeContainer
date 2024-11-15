@@ -3,10 +3,25 @@ FitLife{% endblock %} {% block content %}
 
 <!-- Hero Section -->
 <section class="hero-section text-center py-5 bg-light">
-  <div class="container hero-section-bg">
-    <h1 class="display-4">Welcome to FitLife</h1>
-    <p class="lead">Your fitness journey starts here</p>
-    <p>Get inspired and stay healthy</p>
+  <div class="container">
+    <div class="row align-items-center hero-section-bg" style="height: 40vh">
+      <!-- Left side with image (30%) -->
+      <div class="col-12 col-md-5 d-flex justify-content-center">
+        <img
+          src="{% static 'images/logo.png' %}"
+          alt="Logo"
+          width="250"
+          height="250"
+          class="d-inline-block align-text-top"
+        />
+      </div>
+      <!-- Right side with text (70%) -->
+      <div class="col-12 col-md-7 text-center text-md-start">
+        <h1 class="display-4">Welcome to FitLife</h1>
+        <p class="lead">Your fitness journey starts here</p>
+        <p>Get inspired and stay healthy</p>
+      </div>
+    </div>
   </div>
 </section>
 

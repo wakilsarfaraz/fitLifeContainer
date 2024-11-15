@@ -3,8 +3,8 @@ from django.shortcuts import render
 def home(request):
     context = {
         'sections': [
-            {'title': 'Classes', 'description': 'Explore our classes and take your fitness to the next level.', 'image': 'workouts.png', 'url': 'classes:classes'},
-            {'title': 'Workouts', 'description': 'Discover a variety of workouts for every fitness level.', 'image': 'workouts.png', 'url': 'workouts:workouts'},
+            {'title': 'Classes', 'description': 'Explore our classes and take your fitness to the next level.', 'image': 'fitnessClass.webp', 'url': 'classes:classes'},
+            {'title': 'Workouts', 'description': 'Discover a variety of workouts for every fitness level.', 'image': 'workout.jpg', 'url': 'workouts:workouts'},
             {'title': 'Community', 'description': 'Join our supportive community and achieve your goals together.', 'image': 'workouts.png', 'url': 'community:community'},
         ],
         'testimonials': [
