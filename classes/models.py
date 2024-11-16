@@ -26,4 +26,4 @@ class UserClass(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'fitness_class', 'date')
+        unique_together = ('user', '
