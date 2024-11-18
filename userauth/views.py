@@ -13,7 +13,7 @@ class UserRegistrationView(generic.CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('home')
+        return redirect('')
 
 class CustomLogoutView(LogoutView):
     next_page = '/' 
@@ -24,7 +24,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('home')
+            return redirect('login')
     else:
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
