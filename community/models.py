@@ -48,3 +48,25 @@ class Like(models.Model):
 
     def __str__(self):
         return f"{self.user.username} liked {self.post.subject}"
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    likes_count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.content[:50]}'
+
+class CommentLike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='likes')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'comment')
+
+    def __str__(self):
+        return f'{self.user.username} liked {self.comment}'

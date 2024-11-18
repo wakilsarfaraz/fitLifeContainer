@@ -1,11 +1,12 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DetailView
 from django.urls import reverse_lazy
-from .models import Post, Like
-from .forms import PostForm
-from django.db.models import Count  # Needed for the annotation
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from .models import Post, Like, Comment, CommentLike
+from .forms import PostForm, CommentForm
 
-# ListView to display all posts
 class PostView(ListView):
     model = Post
     template_name = 'community.html'
@@ -13,51 +14,27 @@ class PostView(ListView):
 
     def get_queryset(self):
         queryset = Post.objects.all()
-
         sort_by = self.request.GET.get('sort_by')
-
         if sort_by == 'newest':
-            queryset = queryset.order_by('-date')  # Most recent first
+            queryset = queryset.order_by('-date')
         elif sort_by == 'oldest':
-            queryset = queryset.order_by('date')  # Oldest first
+            queryset = queryset.order_by('date')
         elif sort_by == 'alpha':
-            queryset = queryset.order_by('subject')  # Alphabetical order by subject
+            queryset = queryset.order_by('subject')
         elif sort_by == 'likes':
-            queryset = queryset.annotate(num_likes=Count('likes')).order_by('-num_likes')  # Most liked first
-
+            queryset = queryset.annotate(num_likes=Count('likes')).order_by('-num_likes')
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user'] = self.request.user  # Add the current user to the context
+        context['user'] = self.request.user
         return context
 
-# Like/unlike functionality for a post
-def like_post(request, post_id):
-    """Handles liking and unliking a post without raising an error if the post is already liked."""
-    if not request.user.is_authenticated:
-        return redirect('login')  # Ensure the user is logged in
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'post_detail.html'
+    context_object_name = 'post'
 
-    post = get_object_or_404(Post, id=post_id)
-    
-    # Check if the user has already liked the post
-    like_instance = Like.objects.filter(user=request.user, post=post).first()
-    
-    if like_instance:
-        # If the user has liked the post, remove the like (unlike it)
-        like_instance.delete()
-    else:
-        # If the user hasn't liked the post, add a new like
-        Like.objects.create(user=request.user, post=post)
-
-    # Update the likes_count for the post based on the related Like objects
-    post.likes_count = post.likes.count()  # This will update the count based on the related Like objects
-    post.save()
-
-    # Redirect back to the community page after toggling the like
-    return redirect('community:community')  # Redirect to the community page
-
-# CreateView to handle the creation of a new post
 class AddPostView(CreateView):
     model = Post
     template_name = 'add_post.html'
@@ -68,7 +45,38 @@ class AddPostView(CreateView):
         self.object = form.save(commit=False)
         if self.request.user.is_authenticated:
             self.object.user = self.request.user
-        else:
-            self.object.user = None
         self.object.save()
         return super().form_valid(form)
+
+@login_required
+def like_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    like, created = Like.objects.get_or_create(user=request.user, post=post)
+    if not created:
+        like.delete()
+    post.likes_count = post.likes.count()
+    post.save()
+    return JsonResponse({'liked': created, 'likes_count': post.likes_count})
+
+@login_required
+def add_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        parent_id = request.POST.get('parent_id')
+        if parent_id:
+            parent = get_object_or_404(Comment, id=parent_id)
+            Comment.objects.create(user=request.user, post=post, parent=parent, content=content)
+        else:
+            Comment.objects.create(user=request.user, post=post, content=content)
+    return redirect('community:post_detail', pk=post_id)
+
+@login_required
+def like_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    like, created = CommentLike.objects.get_or_create(user=request.user, comment=comment)
+    if not created:
+        like.delete()
+    comment.likes_count = comment.likes.count()
+    comment.save()
+    return redirect('community:post_detail', pk=comment.post.id)
