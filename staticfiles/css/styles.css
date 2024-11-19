@@ -1,0 +1,12 @@
+.post-img {
+  object-fit: contain;
+  object-position: center;
+  background-color: #f8f9fa;
+  height: 250px;
+  width: 100%;
+}
+
+.custom-bg-light-blue {
+  background-color: #c5d7e0;
+  color: #333;
+}

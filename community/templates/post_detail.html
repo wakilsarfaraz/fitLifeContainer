@@ -4,12 +4,27 @@
     <div class="col-md-8 offset-md-2">
       <div class="card mb-4">
         <div class="card-body">
-          <h2 class="card-title">{{ post.subject }}</h2>
-          <p class="card-text">{{ post.description }}</p>
-          <small class="text-muted"
-            >Posted by {{ post.user.username }} on {{ post.date|date:"M d, Y"
-            }}</small
-          >
+          <h2 class="card-title">{{ post.title }}</h2>
+          <p class="card-text">{{ post.content }}</p>
+
+          <!-- Display image if it exists -->
+          {% if post.image %}
+          <img
+            src="{{ post.image.url }}"
+            class="post-img img-fluid mb-3"
+            alt="{{ post.title }}"
+          />
+          {% endif %}
+
+          <!-- Render date properly -->
+          <small class="text-muted">
+            Posted by {{ post.user.username }} on {{ post.date|localtime|date:"M
+            d, Y h:i A" }}
+          </small>
+
+          <div class="mt-2">
+            <span class="badge bg-secondary">{{ post.category }}</span>
+          </div>
         </div>
       </div>
 
@@ -18,10 +33,10 @@
       <div class="card mb-3">
         <div class="card-body">
           <p>{{ comment.content }}</p>
-          <small class="text-muted"
-            >By {{ comment.user.username }} on {{ comment.created_at|date:"M d,
-            Y" }}</small
-          >
+          <small class="text-muted">
+            By {{ comment.user.username }} on {{
+            comment.created_at|localtime|date:"M d, Y h:i A" }}
+          </small>
         </div>
       </div>
       {% empty %}

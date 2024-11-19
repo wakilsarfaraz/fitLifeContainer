@@ -1,52 +1,91 @@
 {% extends 'base.html' %} {% load widget_tweaks %} {% block content %}
 <div class="container mt-5">
   <div class="row justify-content-center">
-    <!-- Adjusted the column size to make it narrower -->
-    <div class="col-lg-6">
-      <div class="card shadow-lg border-0 rounded-lg">
-        <div class="card-header bg-primary text-white text-center py-4">
-          <!-- Added custom class for title size adjustment -->
-          <h3 class="fw-bold mb-0 custom-title">Share Your Progress</h3>
-        </div>
-        <div class="card-body p-5">
-          <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="mb-4">
-              <label
-                for="{{ form.subject.id_for_label }}"
-                class="form-label fw-bold"
-              >
-                {{ form.subject.label }}
-              </label>
-              {{ form.subject|add_class:"form-control form-control-sm" }}
-            </div>
-            <div class="mb-4">
-              <label
-                for="{{ form.description.id_for_label }}"
-                class="form-label fw-bold"
-              >
-                {{ form.description.label }}
-              </label>
-              {{ form.description|add_class:"form-control form-control-sm" }}
-            </div>
-            <div class="mb-4">
-              <label
-                for="{{ form.image.id_for_label }}"
-                class="form-label fw-bold"
-              >
-                {{ form.image.label }}
-              </label>
-              {{ form.image|add_class:"form-control form-control-sm" }}
-            </div>
-            <div class="d-grid">
-              <button class="btn btn-primary btn-lg" type="submit">
-                Share Your Progress
-              </button>
-            </div>
-          </form>
+    <div class="col-lg-12 d-flex align-items-start">
+      <!-- Image on the left side -->
+      <div
+        class="col-lg-6 d-flex align-items-center mb-4 mb-lg-0"
+        style="padding-right: 20px"
+      >
+        <img
+          src="/static/images/community-post.jpeg"
+          alt="Community Post"
+          class="img-fluid rounded-3 shadow"
+          style="width: 100%; height: auto; object-fit: cover"
+        />
+      </div>
+
+      <!-- Form on the right side -->
+      <div
+        class="col-lg-6 d-flex align-items-center"
+        style="padding-left: 20px"
+      >
+        <div class="card shadow-lg border-0 rounded-3 w-100">
+          <div class="card-header bg-primary text-white text-center py-4">
+            <h3 class="fw-bold mb-0">Share Your Progress</h3>
+          </div>
+          <div class="card-body p-4">
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+
+              <!-- Title Field -->
+              <div class="mb-3">
+                <label
+                  for="{{ form.title.id_for_label }}"
+                  class="form-label fw-bold"
+                >
+                  {{ form.title.label }}
+                </label>
+                {{ form.title|add_class:"form-control form-control-lg" }}
+              </div>
+
+              <!-- Content (Description) Field -->
+              <div class="mb-3">
+                <label
+                  for="{{ form.content.id_for_label }}"
+                  class="form-label fw-bold"
+                >
+                  {{ form.content.label }}
+                </label>
+                {{ form.content|add_class:"form-control form-control-lg" }}
+              </div>
+
+              <!-- Category Field -->
+              <div class="mb-3">
+                <label
+                  for="{{ form.category.id_for_label }}"
+                  class="form-label fw-bold"
+                >
+                  {{ form.category.label }}
+                </label>
+                {{ form.category|add_class:"form-select form-select-lg" }}
+              </div>
+
+              <!-- Image Field -->
+              <div class="mb-3">
+                <label
+                  for="{{ form.image.id_for_label }}"
+                  class="form-label fw-bold"
+                >
+                  {{ form.image.label }}
+                </label>
+                {{ form.image|add_class:"form-control form-control-lg" }}
+              </div>
+
+              <div class="d-grid">
+                <button class="btn btn-primary btn-lg" type="submit">
+                  Share Your Progress
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Adding space between form and footer -->
+  <div class="mt-5"></div>
+  <!-- Adds margin to the bottom for spacing -->
 </div>
 {% endblock %}

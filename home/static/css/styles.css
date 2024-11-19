@@ -194,3 +194,8 @@ footer p {
 .transform-hover:hover {
   transform: translateY(-3px); /* Subtle lift on hover */
 }
+
+.custom-bg-light-blue {
+  background-color: #c5d7e0;
+  color: #333;
+}
