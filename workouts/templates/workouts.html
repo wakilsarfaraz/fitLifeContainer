@@ -1,18 +1,14 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
-<section class="section-header text-center py-5 custom-bg-light-blue">
+<section class="custom-bg-light-blue py-5 mb-5 section-header">
   <div class="container">
-    <div class="row align-items-center">
-      <div class="text-center text-md-center">
-        <h1 class="display-4">Workouts</h1>
-        <p class="lead">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h1 class="display-4 fw-bold mb-4">Workouts</h1>
+        <p class="lead mb-4">
           Explore our wide range of fitness classes and find the one that fits
           you best. Join us and start your fitness journey today! Whether you're
           looking to build strength, improve flexibility, or enhance your
-          cardiovascular fitness, we have something for everyone. Choose from a
-          variety of workout types and get started on the path to a healthier,
-          stronger you. Each workout is carefully crafted by professionals to
-          suit all levels, from beginners to advanced fitness enthusiasts. Start
-          your workout journey today and see the difference!
+          cardiovascular fitness, we have something for everyone.
         </p>
       </div>
     </div>
@@ -20,81 +16,94 @@
 </section>
 
 <!-- Categories Section -->
-<div class="mb-3">
-  <!-- "All" button as the first button -->
-  <button
-    class="btn btn-outline-primary me-2"
-    onclick="filterWorkouts(this, 'all')"
-  >
-    All
-  </button>
+<div class="container">
+  <div class="mb-3" style="margin-top: 30px">
+    <button class="btn btn-outline-primary me-2 active" data-category="all">
+      All
+    </button>
+    {% for category in categories %}
+    <button class="btn btn-outline-primary me-2" data-category="{{ category }}">
+      {{ category }}
+    </button>
+    {% endfor %}
+  </div>
 
-  <!-- Dynamically generated category buttons -->
-  {% for category in categories %}
-  <button
-    class="btn btn-outline-primary me-2"
-    onclick="filterWorkouts(this, '{{ category }}')"
-  >
-    {{ category }}
-  </button>
-  {% endfor %}
-</div>
+  <!-- Workouts Section -->
+  <div class="row" id="workouts-container">
+    {% for workout in workouts %}
+    <div
+      class="col-md-4 mb-4 workout-item"
+      data-category="{{ workout.category }}"
+    >
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ workout.title }}</h5>
+          <p class="card-text">{{ workout.description }}</p>
 
-<!-- Workouts Section -->
-<div class="row" id="workouts-container">
-  {% for workout in workouts %}
-  <div
-    class="col-md-4 mb-4 workout-item"
-    data-category="{{ workout.category }}"
-  >
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">{{ workout.title }}</h5>
-        <p class="card-text">{{ workout.description }}</p>
+          <!-- Video Thumbnail -->
+          <div class="thumbnail-container">
+            <img
+              src="https://img.youtube.com/vi/{{ workout.video_id }}/0.jpg"
+              alt="Video Thumbnail"
+              class="img-fluid"
+              style="cursor: pointer"
+            />
+          </div>
 
-        <!-- Video Thumbnail -->
-        <div class="thumbnail-container">
-          <img
-            src="https://img.youtube.com/vi/{{ workout.video_id }}/0.jpg"
-            alt="Video Thumbnail"
-            class="img-fluid"
-            style="cursor: pointer"
-          />
+          <!-- Button to Watch Video on YouTube -->
+          <a
+            href="{{ workout.youtube_url }}"
+            class="btn btn-primary mt-3"
+            target="_blank"
+          >
+            Watch Video
+          </a>
         </div>
-
-        <!-- Button to Watch Video on YouTube -->
-        <a
-          href="{{ workout.youtube_url }}"
-          class="btn btn-primary"
-          target="_blank"
-        >
-          Watch Video
-        </a>
       </div>
     </div>
+    {% endfor %}
   </div>
-  {% endfor %}
 </div>
 
-<!-- JavaScript -->
-<script>
-  function filterWorkouts(button, category) {
-    // Remove 'active-category' class from all buttons
-    const buttons = document.querySelectorAll(".btn-outline-primary");
-    buttons.forEach((btn) => btn.classList.remove("active-category"));
-
-    // Add 'active-category' class to the clicked button
-    button.classList.add("active-category");
-
-    // Show or hide workouts based on the category
-    const workouts = document.getElementsByClassName("workout-item");
-    for (let workout of workouts) {
-      if (category === "all" || workout.dataset.category === category) {
-        workout.style.display = "block";
-      } else {
-        workout.style.display = "none";
-      }
-    }
+<style>
+  .btn-outline-primary.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
   }
+
+  .btn-outline-primary {
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const categoryButtons = document.querySelectorAll(".btn-outline-primary");
+    const workouts = document.querySelectorAll(".workout-item");
+
+    categoryButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const category = this.getAttribute("data-category");
+
+        // Update active state of buttons
+        categoryButtons.forEach((btn) => btn.classList.remove("active"));
+        this.classList.add("active");
+
+        // Filter workouts
+        workouts.forEach((workout) => {
+          if (
+            category === "all" ||
+            workout.getAttribute("data-category") === category
+          ) {
+            workout.style.display = "block";
+          } else {
+            workout.style.display = "none";
+          }
+        });
+      });
+    });
+  });
 </script>
+
 {% endblock %}
