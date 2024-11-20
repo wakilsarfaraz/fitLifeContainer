@@ -8,3 +8,17 @@
 
 .card-body .d-flex {
   margin-bottom: 0.5rem; /* Space between rows */
+}
+
+.btn {
+  margin-right: 0.5rem; /* Space between buttons */
+}
+
+.text-muted {
+  margin-left: 0.5rem; /* Space between text and icons */
+}
+
+.custom-bg-light-blue {
+  background-color: #c5d7e0;
+  color: #333;
+}
