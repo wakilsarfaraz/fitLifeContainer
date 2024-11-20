@@ -8,6 +8,7 @@ from django.db.models import Count
 from .models import Post, Like, Comment, CommentLike
 from .forms import PostForm, CommentForm
 
+
 class PostView(ListView):
     model = Post
     template_name = 'community.html'
@@ -30,7 +31,8 @@ class PostView(ListView):
         elif sort_by == 'likes':
             queryset = queryset.order_by('-likes_count')
 
-        if self.request.GET.get('my_posts') == 'true':
+        my_posts = self.request.GET.get('my_posts')
+        if my_posts == 'true' and self.request.user.is_authenticated:
             queryset = queryset.filter(user=self.request.user)
 
         return queryset
@@ -44,10 +46,6 @@ class PostView(ListView):
         context['my_posts'] = self.request.GET.get('my_posts') == 'true'
         return context
 
-@login_required
-def my_posts(request):
-    posts = Post.objects.filter(user=request.user).annotate(comments_count=Count('comments')).order_by('-date')
-    return render(request, 'community.html', {'posts': posts, 'my_posts': True})
 
 class PostDetailView(DetailView):
     model = Post
@@ -63,6 +61,7 @@ class PostDetailView(DetailView):
         context['comments'] = comments
         return context
 
+
 class AddPostView(CreateView):
     model = Post
     template_name = 'add_post.html'
@@ -77,31 +76,34 @@ class AddPostView(CreateView):
         messages.success(self.request, "Your post has been added.")
         return super().form_valid(form)
 
+
 class DeletePostView(View):
     def post(self, request, id):
         post = get_object_or_404(Post, id=id)
         if post.user != request.user:
             messages.error(request, "You are not authorized to delete this post.")
             return redirect('community:community')
-        
+
         post.delete()
         messages.success(request, "Your post has been deleted.")
         return redirect('community:community')
+
 
 @login_required
 def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     like, created = Like.objects.get_or_create(user=request.user, post=post)
-    
+
     if not created:
         like.delete()
         post.likes_count -= 1
     else:
         post.likes_count += 1
-        
+
     post.save()
     messages.success(request, "You liked this post!" if created else "You unliked this post.")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
 
 @login_required
 def add_comment(request, post_id):
@@ -120,12 +122,13 @@ def add_comment(request, post_id):
             Comment.objects.create(user=request.user, post=post, content=content)
     return redirect('community:post_detail', pk=post_id)
 
+
 @login_required
 def edit_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     if request.user != comment.user:
         return redirect('community:post_detail', pk=comment.post.id)
-    
+
     if request.method == 'POST':
         content = request.POST.get('content').strip()
         if not content:
@@ -139,27 +142,29 @@ def edit_comment(request, comment_id):
 
     return render(request, 'edit_comment.html', {'comment': comment})
 
+
 @login_required
 def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     if request.user != comment.user:
         return redirect('community:post_detail', pk=comment.post.id)
-    
+
     comment.delete()
     messages.success(request, "Your comment has been deleted.")
     return redirect('community:post_detail', pk=comment.post.id)
+
 
 @login_required
 def like_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     like, created = CommentLike.objects.get_or_create(user=request.user, comment=comment)
-    
+
     if not created:
         like.delete()
         comment.likes_count -= 1
     else:
         comment.likes_count += 1
-        
+
     comment.save()
     messages.success(request, "You liked this comment!" if created else "You unliked this comment.")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
