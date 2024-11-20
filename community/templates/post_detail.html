@@ -17,10 +17,7 @@
           {% endif %}
 
           <!-- Render date properly -->
-          <small class="text-muted">
-            Posted by {{ post.user.username }} on {{ post.date|localtime|date:"M
-            d, Y h:i A" }}
-          </small>
+          <small class="text-muted"> Posted by {{ post.user.username }} </small>
 
           <div class="mt-2">
             <span class="badge bg-secondary">{{ post.category }}</span>
@@ -33,10 +30,7 @@
       <div class="card mb-3">
         <div class="card-body">
           <p>{{ comment.content }}</p>
-          <small class="text-muted">
-            By {{ comment.user.username }} on {{
-            comment.created_at|localtime|date:"M d, Y h:i A" }}
-          </small>
+          <small class="text-muted"> By {{ comment.user.username }} </small>
         </div>
       </div>
       {% empty %}

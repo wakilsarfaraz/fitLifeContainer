@@ -6,15 +6,15 @@ from django.urls import reverse
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=255, default='Default Title')
-    content = models.TextField()
+    title = models.CharField(max_length=255, default='Default Title')  # Updated field
+    content = models.TextField()  # Renamed description to content
     image = models.ImageField(null=True, blank=True, upload_to="images/")
     category = models.CharField(max_length=100, choices=[
         ('workout', 'Workout'),
         ('diet', 'Diet'),
         ('transformation', 'Transformation'),
         ('general', 'General'),
-    ], default='general')
+    ], default='general')  # New field for predefined categories
     likes_count = models.PositiveIntegerField(default=0)
 
     def get_absolute_url(self):
@@ -76,4 +76,3 @@ class CommentLike(models.Model):
 
     def __str__(self):
         return f'{self.user.username} liked {self.comment}'
-
