@@ -11,8 +11,8 @@ class Workout(models.Model):
 
     def get_video_id(self):
         # Extracts the video ID from a YouTube URL
-        if 'youtube.com/watch?v=' in self.youtube_url:
-            return self.youtube_url.split('v=')[-1]
+        if 'v=' in self.youtube_url:
+            return self.youtube_url.split('v=')[-1].split('&')[0]
         elif 'youtu.be/' in self.youtube_url:
-            return self.youtube_url.split('youtu.be/')[-1]
+            return self.youtube_url.split('youtu.be/')[-1].split('?')[0]
         return None

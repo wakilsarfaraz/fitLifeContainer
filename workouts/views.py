@@ -7,7 +7,7 @@ def workouts_view(request):
 
     for workout in workouts:
         workout.video_id = workout.get_video_id()
-        print(workout.video_id)
+        print(f"URL: {workout.youtube_url}, Video ID: {workout.video_id}") 
 
     return render(request, 'workouts.html', {
         'workouts': workouts,
