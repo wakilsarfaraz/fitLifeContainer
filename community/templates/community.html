@@ -25,7 +25,7 @@
           <div class="d-flex justify-content-between align-items-center">
             {% if is_authenticated %}
             <div class="d-flex">
-              <a href="{% url 'community:add_post' %}" class="btn btn-primary me-2">
+              <a href="{% url 'community:add_post' %}" class="btn btn-primary me-2" id="addPostButton">
                 <i class="bi bi-plus-circle me-2"></i>Add a New Post
               </a>
               <a href="?my_posts=true" class="btn btn-secondary me-2 {% if my_posts %}active{% endif %}">
@@ -36,7 +36,7 @@
               </a>
             </div>
             {% else %}
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <button class="btn btn-primary" id="addPostButton">
               <i class="bi bi-plus-circle me-2"></i>Add a New Post
             </button>
             {% endif %}
@@ -156,7 +156,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        You must be logged in to like a post.
+        You must be logged in to add a post.
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -186,6 +186,19 @@
           this.closest('.like-form').submit();
         }
       });
+    });
+
+    // Handle "Add a New Post" button click
+    document.getElementById('addPostButton').addEventListener('click', function(e) {
+      e.preventDefault(); // Prevent default link behavior
+      if (!isAuthenticated) {
+        // Show login modal if user is not authenticated
+        var loginModal = new bootstrap.Modal(document.getElementById('loginRequiredModal'));
+        loginModal.show();
+      } else {
+        // Redirect to the add post page if authenticated
+        window.location.href = "{% url 'community:add_post' %}";
+      }
     });
 
     // Handle delete post modal

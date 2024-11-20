@@ -72,7 +72,4 @@ class CommentLike(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'comment')
-
-    def __str__(self):
-        return f'{self.user.username} liked {self.comment}'
+        unique_together = ('user', 'comme
