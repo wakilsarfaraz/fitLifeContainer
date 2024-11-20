@@ -152,4 +152,14 @@ def delete_comment(request, comment_id):
 @login_required
 def like_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
-    like, created = CommentLi
+    like, created = CommentLike.objects.get_or_create(user=request.user, comment=comment)
+    
+    if not created:
+        like.delete()
+        comment.likes_count -= 1
+    else:
+        comment.likes_count += 1
+        
+    comment.save()
+    messages.success(request, "You liked this comment!" if created else "You unliked this comment.")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
