@@ -110,34 +110,8 @@
   </div>
 </div>
 
-<!-- Toast for messages -->
-<div
-  class="position-fixed top-50 start-50 translate-middle"
-  style="z-index: 11"
->
-  <div
-    id="liveToast"
-    class="toast hide"
-    role="alert"
-    aria-live="assertive"
-    aria-atomic="true"
-  >
-    <div class="toast-header">
-      <strong class="me-auto">Notification</strong>
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="toast"
-        aria-label="Close"
-      ></button>
-    </div>
-    <div class="toast-body"></div>
-  </div>
-</div>
-
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const toast = new bootstrap.Toast(document.getElementById("liveToast"));
     const modal = new bootstrap.Modal(
       document.getElementById("confirmationModal")
     );
@@ -171,8 +145,6 @@
       })
         .then((response) => response.json())
         .then((data) => {
-          document.querySelector(".toast-body").textContent = data.message;
-          toast.show();
           const button = document.querySelector(
             `.class-action-btn[data-class-id="${classId}"]`
           );
