@@ -2,32 +2,26 @@
 
 <!-- Title Section -->
 <section class="custom-bg-light-blue py-5 mb-5 classes-container">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8 text-center">
-        <h1 class="display-4 fw-bold mb-4">Our Classes</h1>
-        <p class="lead mb-4">
-          Explore our wide range of fitness classes and find the one that fits
-          you best. Join us and start your fitness journey today!
-        </p>
-        {% if user.is_authenticated %}
-        <div class="btn-group mb-3" role="group">
-          <a
-            href="{% url 'classes:classes' %}"
-            class="btn {% if request.resolver_match.url_name == 'classes' %}btn-primary{% else %}btn-outline-primary{% endif %}"
-          >
-            All Classes
-          </a>
-          <a
-            href="{% url 'classes:my_classes' %}"
-            class="btn {% if request.resolver_match.url_name == 'my_classes' %}btn-primary{% else %}btn-outline-primary{% endif %}"
-          >
-            My Classes
-          </a>
-        </div>
-        {% endif %}
-      </div>
+  <div class="container text-center">
+    <h1 class="display-4 fw-bold mb-4">Our Classes</h1>
+    <p class="lead mb-4">
+      Explore our wide range of fitness classes and find the one that fits you
+      best. Join us and start your fitness journey today!
+    </p>
+    {% if user.is_authenticated %}
+    <div class="btn-group mb-3" role="group">
+      <a
+        href="{% url 'classes:classes' %}"
+        class="btn {% if request.resolver_match.url_name == 'classes' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+        >All Classes</a
+      >
+      <a
+        href="{% url 'classes:my_classes' %}"
+        class="btn {% if request.resolver_match.url_name == 'my_classes' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+        >My Classes</a
+      >
     </div>
+    {% endif %}
   </div>
 </section>
 
@@ -36,7 +30,7 @@
   <div class="row">
     {% if classes %} {% for class in classes %}
     <div class="col-md-4 mb-3">
-      <div class="card col-12 d-flex flex-column" style="height: 450px">
+      <div class="card d-flex flex-column" style="height: 450px">
         <img
           src="{{ class.image.url }}"
           class="card-img-top img-fluid"
@@ -51,25 +45,17 @@
           <p class="card-text">{{ class.description }}</p>
           <p>Day: {{ class.day_of_week }}</p>
           <p>Time: {{ class.time }}</p>
-          {% if user.is_authenticated %} {% if class.id in my_classes %}
+          {% if user.is_authenticated %}
           <button
             type="button"
-            class="btn btn-danger class-action-btn"
-            data-action="remove"
+            class="btn {% if class.id in my_classes %}btn-danger{% else %}btn-primary{% endif %} class-action-btn"
+            data-action="{% if class.id in my_classes %}remove{% else %}add{% endif %}"
             data-class-id="{{ class.id }}"
           >
-            Remove from My Classes
+            {% if class.id in my_classes %}Remove from My Classes{% else %}Add
+            to My Classes{% endif %}
           </button>
           {% else %}
-          <button
-            type="button"
-            class="btn btn-primary class-action-btn"
-            data-action="add"
-            data-class-id="{{ class.id }}"
-          >
-            Add to My Classes
-          </button>
-          {% endif %} {% else %}
           <a href="{% url 'userauth:login' %}" class="btn btn-primary"
             >Login to Add</a
           >
@@ -80,9 +66,9 @@
     {% endfor %} {% else %}
     <div class="col-12 text-center">
       <p class="text-muted">
-        {% if request.resolver_match.url_name == 'my_classes' %} You haven't
-        added any classes yet. {% else %} No classes are available at the
-        moment. {% endif %}
+        {% if request.resolver_match.url_name == 'my_classes' %}You haven't
+        added any classes yet.{% else %}No classes are available at the
+        moment.{% endif %}
       </p>
     </div>
     {% endif %}
@@ -151,19 +137,18 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    var toastEl = document.getElementById("liveToast");
-    var toast = new bootstrap.Toast(toastEl);
-    var modal = new bootstrap.Modal(
+    const toast = new bootstrap.Toast(document.getElementById("liveToast"));
+    const modal = new bootstrap.Modal(
       document.getElementById("confirmationModal")
     );
-    var confirmActionBtn = document.getElementById("confirmActionBtn");
-    var actionText = document.getElementById("actionText");
-    var actionPreposition = document.getElementById("actionPreposition");
+    const confirmActionBtn = document.getElementById("confirmActionBtn");
+    const actionText = document.getElementById("actionText");
+    const actionPreposition = document.getElementById("actionPreposition");
 
     document.querySelectorAll(".class-action-btn").forEach((button) => {
       button.addEventListener("click", function () {
-        var action = this.dataset.action;
-        var classId = this.dataset.classId;
+        const action = this.dataset.action;
+        const classId = this.dataset.classId;
         actionText.textContent = action === "add" ? "add" : "remove";
         actionPreposition.textContent = action === "add" ? "to" : "from";
         confirmActionBtn.dataset.action = action;
@@ -173,12 +158,9 @@
     });
 
     confirmActionBtn.addEventListener("click", function () {
-      var action = this.dataset.action;
-      var classId = this.dataset.classId;
-      var url =
-        action === "add"
-          ? `/classes/${classId}/add/`
-          : `/classes/${classId}/remove/`;
+      const action = this.dataset.action;
+      const classId = this.dataset.classId;
+      const url = `/classes/${classId}/${action}/`;
 
       fetch(url, {
         method: "POST",
@@ -191,20 +173,15 @@
         .then((data) => {
           document.querySelector(".toast-body").textContent = data.message;
           toast.show();
-
+          const button = document.querySelector(
+            `.class-action-btn[data-class-id="${classId}"]`
+          );
           if (data.status === "success") {
-            var button = document.querySelector(
-              `.class-action-btn[data-class-id="${classId}"]`
-            );
-            if (action === "add") {
-              button.textContent = "Remove from My Classes";
-              button.classList.replace("btn-primary", "btn-danger");
-              button.dataset.action = "remove";
-            } else {
-              button.textContent = "Add to My Classes";
-              button.classList.replace("btn-danger", "btn-primary");
-              button.dataset.action = "add";
-            }
+            button.textContent =
+              action === "add" ? "Remove from My Classes" : "Add to My Classes";
+            button.classList.toggle("btn-primary");
+            button.classList.toggle("btn-danger");
+            button.dataset.action = action === "add" ? "remove" : "add";
           }
         });
 
@@ -212,18 +189,10 @@
     });
 
     function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(";");
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === name + "=") {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
-        }
-      }
-      return cookieValue;
+      return document.cookie.split("; ").reduce((acc, cookie) => {
+        const [key, value] = cookie.split("=");
+        return key === name ? decodeURIComponent(value) : acc;
+      }, null);
     }
   });
 </script>
