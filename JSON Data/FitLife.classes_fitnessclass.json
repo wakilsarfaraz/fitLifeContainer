@@ -1,0 +1,180 @@
+[{
+  "_id": {
+    "$oid": "673f44704cb1c54b43d81b72"
+  },
+  "id": 1,
+  "name": "Yoga Basics",
+  "description": "A beginner-friendly yoga class focusing on posture and breathing.",
+  "day_of_week": "Monday",
+  "time": {
+    "$date": {
+      "$numberLong": "-2208956400000"
+    }
+  },
+  "image": "classes/1.png"
+},
+{
+  "_id": {
+    "$oid": "673f44934cb1c54b43d81b74"
+  },
+  "id": 2,
+  "name": "HIIT Training",
+  "description": "High-intensity interval training to burn fat and build strength.",
+  "day_of_week": "Monday",
+  "time": {
+    "$date": {
+      "$numberLong": "-2208924000000"
+    }
+  },
+  "image": "classes/2.png"
+},
+{
+  "_id": {
+    "$oid": "673f44b24cb1c54b43d81b76"
+  },
+  "id": 3,
+  "name": "Pilates for Core",
+  "description": "Pilates exercises that strengthen the core and improve flexibility.",
+  "day_of_week": "Tuesday",
+  "time": {
+    "$date": {
+      "$numberLong": "-2208961800000"
+    }
+  },
+  "image": "classes/3.png"
+},
+{
+  "_id": {
+    "$oid": "673f44d84cb1c54b43d81b78"
+  },
+  "id": 4,
+  "name": "Zumba Dance",
+  "description": "A fun dance workout that combines Latin rhythms and aerobic moves.",
+  "day_of_week": "Tuesday",
+  "time": {
+    "$date": {
+      "$numberLong": "-2208920400000"
+    }
+  },
+  "image": "classes/4.png"
+},
+{
+  "_id": {
+    "$oid": "673f45104cb1c54b43d81b7a"
+  },
+  "id": 5,
+  "name": "Cardio Kickboxing",
+  "description": "A high-energy workout that combines cardio with kickboxing techniques.",
+  "day_of_week": "Wednesday",
+  "time": {
+    "$date": {
+      "$numberLong": "-2208952800000"
+    }
+  },
+  "image": "classes/5.png"
+},
+{
+  "_id": {
+    "$oid": "673f452d4cb1c54b43d81b7c"
+  },
+  "id": 6,
+  "name": "Strength Training",
+  "description": "Focus on building muscle strength using weights and resistance exercises.",
+  "day_of_week": "Wednesday",
+  "time": {
+    "$date": {
+      "$numberLong": "-2208924000000"
+    }
+  },
+  "image": "classes/6.png"
+},
+{
+  "_id": {
+    "$oid": "673f45484cb1c54b43d81b7e"
+  },
+  "id": 7,
+  "name": "Body Pump",
+  "description": "A full-body workout using a barbell for strength and endurance.",
+  "day_of_week": "Thursday",
+  "time": {
+    "$date": {
+      "$numberLong": "-2208960000000"
+    }
+  },
+  "image": "classes/7.png"
+},
+{
+  "_id": {
+    "$oid": "673f45694cb1c54b43d81b80"
+  },
+  "id": 8,
+  "name": "Spin Class",
+  "description": "Cycling indoors with high-intensity sprints and climbs.",
+  "day_of_week": "Thursday",
+  "time": {
+    "$date": {
+      "$numberLong": "-2208920400000"
+    }
+  },
+  "image": "classes/8.png"
+},
+{
+  "_id": {
+    "$oid": "673f45924cb1c54b43d81b82"
+  },
+  "id": 9,
+  "name": "Kickboxing for Fitness",
+  "description": "A fitness-focused class using kickboxing techniques for endurance and strength.",
+  "day_of_week": "Friday",
+  "time": {
+    "$date": {
+      "$numberLong": "-2208961800000"
+    }
+  },
+  "image": "classes/9.png"
+},
+{
+  "_id": {
+    "$oid": "673f45b14cb1c54b43d81b84"
+  },
+  "id": 10,
+  "name": "Stretch & Flex",
+  "description": "A class focused on flexibility and stretching exercises to improve range of motion.",
+  "day_of_week": "Friday",
+  "time": {
+    "$date": {
+      "$numberLong": "-2208952800000"
+    }
+  },
+  "image": "classes/10.png"
+},
+{
+  "_id": {
+    "$oid": "673f46354cb1c54b43d81b86"
+  },
+  "id": 11,
+  "name": "Barre Fitness",
+  "description": "A ballet-inspired workout that combines strength training with flexibility.",
+  "day_of_week": "Saturday",
+  "time": {
+    "$date": {
+      "$numberLong": "-2208956400000"
+    }
+  },
+  "image": "classes/11.png"
+},
+{
+  "_id": {
+    "$oid": "673f465b4cb1c54b43d81b88"
+  },
+  "id": 12,
+  "name": "CrossFit",
+  "description": "A high-intensity training program combining strength and conditioning.",
+  "day_of_week": "Saturday",
+  "time": {
+    "$date": {
+      "$numberLong": "-2208927600000"
+    }
+  },
+  "image": "classes/12.png"
+}]

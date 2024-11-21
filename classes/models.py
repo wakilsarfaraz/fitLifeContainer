@@ -1,7 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 import os
+from django.contrib import admin
 
+
+class FitnessClassAdmin(admin.ModelAdmin):
+    # Exclude the id field from the form
+    exclude = ['id']
+
+class UserClassAdmin(admin.ModelAdmin):
+    # Exclude the id field from the form
+    exclude = ['id']
+    
 # Image upload path function
 def fitness_class_image_upload_to(instance, filename):
     return os.path.join('classes', filename)
