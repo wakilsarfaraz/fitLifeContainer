@@ -1,4 +1,5 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
+
 <!-- Title Section -->
 <section class="custom-bg-light-blue py-5 mb-5 classes-container">
   <div class="container">
@@ -9,44 +10,222 @@
           Explore our wide range of fitness classes and find the one that fits
           you best. Join us and start your fitness journey today!
         </p>
+        {% if user.is_authenticated %}
+        <div class="btn-group mb-3" role="group">
+          <a
+            href="{% url 'classes:classes' %}"
+            class="btn {% if request.resolver_match.url_name == 'classes' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+          >
+            All Classes
+          </a>
+          <a
+            href="{% url 'classes:my_classes' %}"
+            class="btn {% if request.resolver_match.url_name == 'my_classes' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+          >
+            My Classes
+          </a>
+        </div>
+        {% endif %}
       </div>
     </div>
   </div>
 </section>
 
 <!-- Classes Section -->
-<div class="row">
-  {% for class in classes %}
-  <div class="col-md-4 mb-3">
-    <div class="card col-12 d-flex flex-column" style="height: 450px">
-      <!-- Set a fixed height for the card -->
-      <img
-        src="{{ class.image.url }}"
-        class="card-img-top img-fluid"
-        alt="{{ class.name }}"
-        style="height: 200px; object-fit: cover"
-      />
-      <!-- Set a fixed height for the image -->
-      <div
-        class="card-body d-flex flex-column justify-content-between"
-        style="flex-grow: 1"
-      >
-        <!-- Ensures content stretches to fit the height -->
-        <h5 class="card-title">{{ class.name }}</h5>
-        <p class="card-text">{{ class.description }}</p>
-        <p>Time: {{ class.time }}</p>
-        {% if user.is_authenticated %}
-        <a href="{% url 'classes:my_classes' %}" class="btn btn-primary">
-          Add to My Classes
-        </a>
-        {% else %}
-        <a href="{% url 'userauth:login' %}" class="btn btn-primary">
-          Login to Add
-        </a>
-        {% endif %}
+<div class="container">
+  <div class="row">
+    {% if classes %} {% for class in classes %}
+    <div class="col-md-4 mb-3">
+      <div class="card col-12 d-flex flex-column" style="height: 450px">
+        <img
+          src="{{ class.image.url }}"
+          class="card-img-top img-fluid"
+          alt="{{ class.name }}"
+          style="height: 200px; object-fit: cover"
+        />
+        <div
+          class="card-body d-flex flex-column justify-content-between"
+          style="flex-grow: 1"
+        >
+          <h5 class="card-title">{{ class.name }}</h5>
+          <p class="card-text">{{ class.description }}</p>
+          <p>Day: {{ class.day_of_week }}</p>
+          <p>Time: {{ class.time }}</p>
+          {% if user.is_authenticated %} {% if class.id in my_classes %}
+          <button
+            type="button"
+            class="btn btn-danger class-action-btn"
+            data-action="remove"
+            data-class-id="{{ class.id }}"
+          >
+            Remove from My Classes
+          </button>
+          {% else %}
+          <button
+            type="button"
+            class="btn btn-primary class-action-btn"
+            data-action="add"
+            data-class-id="{{ class.id }}"
+          >
+            Add to My Classes
+          </button>
+          {% endif %} {% else %}
+          <a href="{% url 'userauth:login' %}" class="btn btn-primary"
+            >Login to Add</a
+          >
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <div class="col-12 text-center">
+      <p class="text-muted">
+        {% if request.resolver_match.url_name == 'my_classes' %} You haven't
+        added any classes yet. {% else %} No classes are available at the
+        moment. {% endif %}
+      </p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div
+  class="modal fade"
+  id="confirmationModal"
+  tabindex="-1"
+  aria-labelledby="confirmationModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to <span id="actionText"></span> this class
+        <span id="actionPreposition"></span> your classes?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-primary" id="confirmActionBtn">
+          Confirm
+        </button>
       </div>
     </div>
   </div>
-  {% endfor %}
 </div>
+
+<!-- Toast for messages -->
+<div
+  class="position-fixed top-50 start-50 translate-middle"
+  style="z-index: 11"
+>
+  <div
+    id="liveToast"
+    class="toast hide"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div class="toast-header">
+      <strong class="me-auto">Notification</strong>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="toast-body"></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var toastEl = document.getElementById("liveToast");
+    var toast = new bootstrap.Toast(toastEl);
+    var modal = new bootstrap.Modal(
+      document.getElementById("confirmationModal")
+    );
+    var confirmActionBtn = document.getElementById("confirmActionBtn");
+    var actionText = document.getElementById("actionText");
+    var actionPreposition = document.getElementById("actionPreposition");
+
+    document.querySelectorAll(".class-action-btn").forEach((button) => {
+      button.addEventListener("click", function () {
+        var action = this.dataset.action;
+        var classId = this.dataset.classId;
+        actionText.textContent = action === "add" ? "add" : "remove";
+        actionPreposition.textContent = action === "add" ? "to" : "from";
+        confirmActionBtn.dataset.action = action;
+        confirmActionBtn.dataset.classId = classId;
+        modal.show();
+      });
+    });
+
+    confirmActionBtn.addEventListener("click", function () {
+      var action = this.dataset.action;
+      var classId = this.dataset.classId;
+      var url =
+        action === "add"
+          ? `/classes/${classId}/add/`
+          : `/classes/${classId}/remove/`;
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": getCookie("csrftoken"),
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          document.querySelector(".toast-body").textContent = data.message;
+          toast.show();
+
+          if (data.status === "success") {
+            var button = document.querySelector(
+              `.class-action-btn[data-class-id="${classId}"]`
+            );
+            if (action === "add") {
+              button.textContent = "Remove from My Classes";
+              button.classList.replace("btn-primary", "btn-danger");
+              button.dataset.action = "remove";
+            } else {
+              button.textContent = "Add to My Classes";
+              button.classList.replace("btn-danger", "btn-primary");
+              button.dataset.action = "add";
+            }
+          }
+        });
+
+      modal.hide();
+    });
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === name + "=") {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  });
+</script>
+
 {% endblock %}
