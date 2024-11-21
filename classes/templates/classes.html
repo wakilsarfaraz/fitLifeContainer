@@ -1,41 +1,46 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <!-- Title Section -->
-<div
-  class="custom-bg-light-blue d-flex justify-content-center section-header align-items-center"
->
-  <div>
-    <h1>Our Classes</h1>
-    <p>
-      Explore our wide range of fitness classes and find the one that fits you
-      best. Join us and start your fitness journey today!
-    </p>
+<section class="custom-bg-light-blue py-5 mb-5 classes-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h1 class="display-4 fw-bold mb-4">Our Classes</h1>
+        <p class="lead mb-4">
+          Explore our wide range of fitness classes and find the one that fits
+          you best. Join us and start your fitness journey today!
+        </p>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
 <!-- Classes Section -->
 <div class="row">
   {% for class in classes %}
-  <div class="col-md-4 mb-4">
-    <div class="card col-10">
+  <div class="col-md-4 mb-3">
+    <div class="card col-12 d-flex flex-column" style="height: 450px">
+      <!-- Set a fixed height for the card -->
       <img
         src="{{ class.image.url }}"
         class="card-img-top img-fluid"
         alt="{{ class.name }}"
+        style="height: 200px; object-fit: cover"
       />
-      <div class="card-body">
+      <div
+        class="card-body d-flex flex-column justify-content-between"
+        style="flex-grow: 1"
+      >
         <h5 class="card-title">{{ class.name }}</h5>
         <p class="card-text">{{ class.description }}</p>
         <p>Time: {{ class.time }}</p>
         {% if user.is_authenticated %}
-        <a
-          href="{% url 'classes:my_classes' class.id %}"
-          class="btn btn-primary"
-          >Add to My Classes</a
-        >
+        <a href="{% url 'classes:my_classes' %}" class="btn btn-primary">
+          Add to My Classes
+        </a>
         {% else %}
-        <a href="{% url 'userauth:login' %}" class="btn btn-primary"
-          >Login to Add</a
-        >
+        <a href="{% url 'userauth:login' %}" class="btn btn-primary">
+          Login to Add
+        </a>
         {% endif %}
       </div>
     </div>

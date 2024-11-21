@@ -1,5 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+import os
+
+# Image upload path function
+def fitness_class_image_upload_to(instance, filename):
+    return os.path.join('classes', filename)
 
 class FitnessClass(models.Model):
     name = models.CharField(max_length=100)
@@ -14,8 +19,7 @@ class FitnessClass(models.Model):
         ('Sunday', 'Sunday'),
     ])
     time = models.TimeField(null=True, blank=True)  
-    image = models.ImageField(upload_to='images/')
-
+    image = models.ImageField(upload_to=fitness_class_image_upload_to)  
     def __str__(self):
         return self.name
 
@@ -23,7 +27,9 @@ class UserClass(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     fitness_class = models.ForeignKey(FitnessClass, on_delete=models.CASCADE)
     date = models.DateField()
-    date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'fitness_class', 'date')
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'fitness_class', 'date'], name='unique_user_class_date')
+        ]
+

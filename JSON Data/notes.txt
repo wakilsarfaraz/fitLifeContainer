@@ -1,0 +1,2 @@
+These files can be imported to FitLife Database using import
+Should show how in mongo db compass and shell }
