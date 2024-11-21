@@ -2,16 +2,18 @@
 FitLife{% endblock %} {% block content %}
 
 <!-- Hero Section -->
-<section class="hero-section text-center py-5 bg-light">
+<section class="custom-bg-light-blue hero-section text-center py-5">
   <div class="container">
     <div class="row align-items-center hero-section-bg" style="height: 40vh">
       <!-- Left side with image (30%) -->
-      <div class="col-12 col-md-5 d-flex justify-content-center">
+      <div
+        class="custom-bg-light-blue col-12 col-md-5 d-flex justify-content-center"
+      >
         <img
           src="{% static 'images/logo.png' %}"
           alt="Logo"
-          width="250"
-          height="250"
+          width="300"
+          height="300"
           class="d-inline-block align-text-top"
         />
       </div>
@@ -53,12 +55,12 @@ FitLife{% endblock %} {% block content %}
 <section class="bg-light py-5">
   <div class="container">
     <h2 class="text-center mb-4">What Our Members Say</h2>
-    <div class="row">
+    <div class="row d-flex align-items-stretch">
       {% for testimonial in testimonials %}
       <div class="col-md-4 mb-4">
-        <div class="card">
+        <div class="card h-100">
           <img
-            src="{% static 'images/testimonial-'|add:forloop.counter|add:'.jpg' %}"
+            src="{% static 'images/'|add:testimonial.image %}"
             class="card-img-top"
             alt="{{ testimonial.name }}"
           />
@@ -74,7 +76,7 @@ FitLife{% endblock %} {% block content %}
 </section>
 
 <!-- Call to Action Section -->
-<section class="bg-primary text-white py-5">
+<section class="custom-bg-light-blue text-white py-5 mt-5">
   <div class="container text-center">
     <h2 class="mb-4">Ready to Start Your Fitness Journey?</h2>
     <p class="lead mb-4">Join FitLife today and experience the difference!</p>
