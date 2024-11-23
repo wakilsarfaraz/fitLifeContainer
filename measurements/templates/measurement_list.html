@@ -1,0 +1,269 @@
+{% extends "base.html" %} {% load static %} {% block title %}Measurement Tracker
+- FitLife{% endblock %} {% block content %}
+<div class="container mt-4">
+  <h1>Measurement Tracker</h1>
+  <button class="btn btn-success mb-3" id="addMeasurementButton">
+    Add Measurement
+  </button>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Weight</th>
+        <th>Height</th>
+        <th>Chest</th>
+        <th>Waist</th>
+        <th>Hips</th>
+        <th>Thighs</th>
+        <th>Calves</th>
+        <th>Arms</th>
+        <th>BMI</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for measurement in measurements %}
+      <tr>
+        <td>{{ measurement.weight }} cm</td>
+        <td>{{ measurement.height }} cm</td>
+        <td>{{ measurement.chest }} cm</td>
+        <td>{{ measurement.waist }} cm</td>
+        <td>{{ measurement.hips }} cm</td>
+        <td>{{ measurement.thighs }} cm</td>
+        <td>{{ measurement.calves }} cm</td>
+        <td>{{ measurement.left_arm }} / {{ measurement.right_arm }} cm</td>
+        <td>{{ measurement.bmi }}</td>
+        <td>
+          <button
+            class="btn btn-warning"
+            onclick="editMeasurement({{ measurement.id }})"
+          >
+            Edit
+          </button>
+          <form
+            action="{% url 'measurements:delete_measurement' measurement.id %}"
+            method="POST"
+            style="display: inline"
+          >
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal for Login Required -->
+<div
+  class="modal fade"
+  id="loginRequiredModal"
+  tabindex="-1"
+  aria-labelledby="loginRequiredModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginRequiredModalLabel">Login Required</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        You must be logged in to add or edit measurements. Please log in to
+        continue.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <a href="{% url 'userauth:login' %}" class="btn btn-primary">Login</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Add/Edit Measurement -->
+<div
+  class="modal fade"
+  id="measurementModal"
+  tabindex="-1"
+  aria-labelledby="measurementModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="measurementModalLabel">
+          Add/Edit Measurement
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="measurementForm" method="POST">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="id_weight" class="form-label">Weight</label>
+              <input
+                type="number"
+                id="id_weight"
+                name="weight"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="id_height" class="form-label">Height</label>
+              <input
+                type="number"
+                id="id_height"
+                name="height"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="id_chest" class="form-label">Chest</label>
+              <input
+                type="number"
+                id="id_chest"
+                name="chest"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="id_waist" class="form-label">Waist</label>
+              <input
+                type="number"
+                id="id_waist"
+                name="waist"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="id_hips" class="form-label">Hips</label>
+              <input
+                type="number"
+                id="id_hips"
+                name="hips"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="id_thighs" class="form-label">Thighs</label>
+              <input
+                type="number"
+                id="id_thighs"
+                name="thighs"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="id_calves" class="form-label">Calves</label>
+              <input
+                type="number"
+                id="id_calves"
+                name="calves"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="id_left_arm" class="form-label">Left Arm</label>
+              <input
+                type="number"
+                id="id_left_arm"
+                name="left_arm"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="id_right_arm" class="form-label">Right Arm</label>
+              <input
+                type="number"
+                id="id_right_arm"
+                name="right_arm"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="id_bmi" class="form-label">BMI</label>
+              <input
+                type="text"
+                id="id_bmi"
+                name="bmi"
+                class="form-control"
+                readonly
+              />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" id="saveButton">
+            Save
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById("addMeasurementButton").onclick = function() {
+      {% if not user.is_authenticated %}
+          // Show the login required modal if the user is not authenticated
+          var loginRequiredModal = new bootstrap.Modal(document.getElementById('loginRequiredModal'));
+          loginRequiredModal.show();
+      {% else %}
+          // Show the measurement modal if the user is authenticated
+          var measurementModal = new bootstrap.Modal(document.getElementById('measurementModal'));
+          measurementModal.show();
+      {% endif %}
+  };
+
+  function calculateBMI() {
+      const weight = parseFloat(document.getElementById("id_weight").value);
+      const height = parseFloat(document.getElementById("id_height").value) / 100; // Convert cm to meters
+      if (!isNaN(weight) && !isNaN(height) && height > 0) {
+          const bmi = (weight / (height * height)).toFixed(2);
+          document.getElementById("id_bmi").value = bmi;
+      }
+  }
+
+  document.getElementById("measurementForm").addEventListener("input", calculateBMI);
+
+  function editMeasurement(id) {
+      fetch(`/measurements/${id}/`)
+          .then((response) => response.json())
+          .then((data) => {
+              document.getElementById("id_weight").value = data.weight;
+              document.getElementById("id_height").value = data.height;
+              document.getElementById("id_chest").value = data.chest;
+              document.getElementById("id_waist").value = data.waist;
+              document.getElementById("id_hips").value = data.hips;
+              document.getElementById("id_thighs").value = data.thighs;
+              document.getElementById("id_calves").value = data.calves;
+              document.getElementById("id_left_arm").value = data.left_arm;
+              document.getElementById("id_right_arm").value = data.right_arm;
+              document.getElementById("id_bmi").value = data.bmi;
+              document.getElementById("measurementForm").action = `/measurements/${id}/update/`;
+              document.getElementById("saveButton").textContent = "Update Measurement";
+          });
+  }
+</script>
+{% endblock %}

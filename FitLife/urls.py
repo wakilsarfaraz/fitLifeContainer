@@ -11,4 +11,5 @@ urlpatterns = [
     path('workouts/', include(('workouts.urls', 'workouts'), namespace='workouts')),
     path('userauth/', include('django.contrib.auth.urls')),
     path('userauth/', include(('userauth.urls', 'userauth'), namespace='userauth')),
+    path('measurements/', include('measurements.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

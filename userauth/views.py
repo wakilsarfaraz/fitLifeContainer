@@ -1,6 +1,6 @@
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import LogoutView, LoginView
 from django.views import generic
 from django.urls import reverse_lazy
 from .forms import CustomUserCreationForm
@@ -16,6 +16,9 @@ class UserRegistrationView(generic.CreateView):
         return redirect('')
 
 class CustomLogoutView(LogoutView):
+    next_page = '/' 
+
+class CustomLoginView(LoginView):
     next_page = '/' 
 
 def register(request):

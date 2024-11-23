@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'workouts',
     'community',
     'userauth',
+    'measurements',
     'widget_tweaks',
 ]
 
