@@ -1,8 +1,22 @@
 {% extends "base.html" %} {% load static %} {% block title %} Measurement List -
 FitLife {% endblock %} {% block content %}
-<div class="container mt-5">
-  <h1 class="mb-4">Measurements</h1>
+<section class="custom-bg-light-blue py-5 mb-5 section-header">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h1 class="display-4 fw-bold mb-4">Measurements</h1>
+        <p class="lead mb-4">
+          Track your fitness journey with our comprehensive measurement logs.
+          Whether you want to monitor your weight, body measurements, or
+          progress, this is the perfect tool to help you stay on track. Start
+          today and achieve your fitness goals!
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
+<div class="container mt-5">
   {% if user.is_authenticated %}
   <button
     class="btn btn-primary mb-3"
@@ -26,6 +40,8 @@ FitLife {% endblock %} {% block content %}
         <th>Left Arm</th>
         <th>Right Arm</th>
         <th>Unit</th>
+        <th>Notes</th>
+        <!-- Added Notes column -->
         <th>Actions</th>
       </tr>
     </thead>
@@ -42,6 +58,8 @@ FitLife {% endblock %} {% block content %}
         <td>{{ measurement.left_arm }}</td>
         <td>{{ measurement.right_arm }}</td>
         <td>{{ measurement.unit }}</td>
+        <td>{{ measurement.notes }}</td>
+        <!-- Added Notes display -->
         <td>
           <button
             class="btn btn-warning btn-edit"
@@ -265,7 +283,7 @@ FitLife {% endblock %} {% block content %}
     document.getElementById("left_arm").value = cells[7].innerText;
     document.getElementById("right_arm").value = cells[8].innerText;
     document.getElementById("unit").value = cells[9].innerText;
-    document.getElementById("notes").value = cells[10].innerText;
+    document.getElementById("notes").value = cells[10].innerText; // Updated to get notes
     document.getElementById("measurementId").value = id;
 
     document.getElementById("measurementModalLabel").innerText =
@@ -343,9 +361,20 @@ FitLife {% endblock %} {% block content %}
                 <td>${data.measurement.left_arm}</td>
                 <td>${data.measurement.right_arm}</td>
                 <td>${data.measurement.unit}</td>
+                <td>${
+                  data.measurement.notes || ""
+                }</td> <!-- Updated to include notes -->
                 <td>
-                  <button class="btn btn-warning btn-edit" data-id="${data.measurement.id}" onclick="editMeasurement(${data.measurement.id})">Edit</button>
-                  <button class="btn btn-danger btn-delete" data-id="${data.measurement.id}" onclick="deleteMeasurement(${data.measurement.id})">Delete</button>
+                  <button class="btn btn-warning btn-edit" data-id="${
+                    data.measurement.id
+                  }" onclick="editMeasurement(${
+                data.measurement.id
+              })">Edit</button>
+                  <button class="btn btn-danger btn-delete" data-id="${
+                    data.measurement.id
+                  }" onclick="deleteMeasurement(${
+                data.measurement.id
+              })">Delete</button>
                 </td>`;
             } else {
               // Add new measurement
@@ -360,9 +389,20 @@ FitLife {% endblock %} {% block content %}
                 <td>${data.measurement.left_arm}</td>
                 <td>${data.measurement.right_arm}</td>
                 <td>${data.measurement.unit}</td>
+                <td>${
+                  data.measurement.notes || ""
+                }</td> <!-- Updated to include notes -->
                 <td>
-                  <button class="btn btn-warning btn-edit" data-id="${data.measurement.id}" onclick="editMeasurement(${data.measurement.id})">Edit</button>
-                  <button class="btn btn-danger btn-delete" data-id="${data.measurement.id}" onclick="deleteMeasurement(${data.measurement.id})">Delete</button>
+                  <button class="btn btn-warning btn-edit" data-id="${
+                    data.measurement.id
+                  }" onclick="editMeasurement(${
+                data.measurement.id
+              })">Edit</button>
+                  <button class="btn btn-danger btn-delete" data-id="${
+                    data.measurement.id
+                  }" onclick="deleteMeasurement(${
+                data.measurement.id
+              })">Delete</button>
                 </td>
               </tr>`;
               tableBody.innerHTML += newRow;
