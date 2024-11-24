@@ -8,5 +8,4 @@ urlpatterns = [
     path('add/', views.add_measurement, name='add_measurement'),
     path('<int:pk>/edit/', views.edit_measurement, name='edit_measurement'),
     path('<int:pk>/delete/', views.delete_measurement, name='delete_measurement'),
-    path('<int:pk>/', views.measurement_detail, name='measurement_detail'),  # API endpoint for editing
 ]
