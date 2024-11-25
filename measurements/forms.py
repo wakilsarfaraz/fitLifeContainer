@@ -9,4 +9,5 @@ class MeasurementForm(forms.ModelForm):
             'thighs', 'calves', 'left_arm', 'right_arm', 'unit', 'notes'
         ]
         widgets = {
-            'note
+            'notes': forms.Textarea(attrs={'rows': 3}),
+        }
