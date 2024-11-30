@@ -1,5 +1,6 @@
 from djongo import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 
 class Measurement(models.Model):
     UNIT_CHOICES = [
@@ -9,15 +10,15 @@ class Measurement(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='measurements')
     date = models.DateField(auto_now_add=True)
-    weight = models.DecimalField(max_digits=5, decimal_places=2)
-    height = models.DecimalField(max_digits=5, decimal_places=2)
-    chest = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    waist = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    hips = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    thighs = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    calves = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    left_arm = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    right_arm = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    weight = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0.01)])
+    height = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0.01)])
+    chest = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0.01)])
+    waist = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0.01)])
+    hips = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0.01)])
+    thighs = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0.01)])
+    calves = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0.01)])
+    left_arm = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0.01)])
+    right_arm = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0.01)])
     unit = models.CharField(max_length=2, choices=UNIT_CHOICES, default='cm')
     notes = models.TextField(null=True, blank=True)
 
