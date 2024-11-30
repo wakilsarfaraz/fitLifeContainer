@@ -222,3 +222,11 @@ footer p {
   height: 100px;
   object-fit: cover;
 }
+
+.content-wrapper {
+  flex: 1 0 auto; /* Allow the content to grow and take up available space */
+}
+
+footer {
+  flex-shrink: 0; /* Prevent the footer from shrinking */
+}

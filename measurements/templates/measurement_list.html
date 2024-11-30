@@ -27,6 +27,17 @@ FitLife {% endblock %} {% block content %}
     Add Measurement
   </button>
 
+  <div
+    id="noMeasurementsMessage"
+    class="alert alert-info"
+    role="alert"
+    style="display: none"
+  >
+    You have no measurements yet.
+    <strong>Start by adding your first measurement!</strong>
+  </div>
+
+  {% if measurements %}
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -41,7 +52,6 @@ FitLife {% endblock %} {% block content %}
         <th>Right Arm</th>
         <th>Unit</th>
         <th>Notes</th>
-        <!-- Added Notes column -->
         <th>Actions</th>
       </tr>
     </thead>
@@ -59,19 +69,18 @@ FitLife {% endblock %} {% block content %}
         <td>{{ measurement.right_arm }}</td>
         <td>{{ measurement.unit }}</td>
         <td>{{ measurement.notes }}</td>
-        <!-- Added Notes display -->
         <td>
           <button
             class="btn btn-warning btn-edit"
             data-id="{{ measurement.id }}"
-            onclick="editMeasurement({{ measurement.id }})"
+            onclick="editMeasurement(this)"
           >
             Edit
           </button>
           <button
             class="btn btn-danger btn-delete"
             data-id="{{ measurement.id }}"
-            onclick="deleteMeasurement({{ measurement.id }})"
+            onclick="deleteMeasurement(this)"
           >
             Delete
           </button>
@@ -81,6 +90,10 @@ FitLife {% endblock %} {% block content %}
     </tbody>
   </table>
   {% else %}
+  <script>
+    document.getElementById("noMeasurementsMessage").style.display = "block";
+  </script>
+  {% endif %} {% else %}
   <div class="alert alert-warning" role="alert">
     Please log in to start tracking your measurements.
     <button
@@ -269,7 +282,12 @@ FitLife {% endblock %} {% block content %}
       "Add Measurement";
   }
 
-  function editMeasurement(id) {
+  function validatePositiveNumber(value) {
+    return value > 0; // Ensure value is greater than 0
+  }
+
+  function editMeasurement(button) {
+    const id = button.getAttribute("data-id");
     const row = document.getElementById(`measurement-${id}`);
     const cells = row.getElementsByTagName("td");
 
@@ -283,7 +301,7 @@ FitLife {% endblock %} {% block content %}
     document.getElementById("left_arm").value = cells[7].innerText;
     document.getElementById("right_arm").value = cells[8].innerText;
     document.getElementById("unit").value = cells[9].innerText;
-    document.getElementById("notes").value = cells[10].innerText; // Updated to get notes
+    document.getElementById("notes").value = cells[10].innerText;
     document.getElementById("measurementId").value = id;
 
     document.getElementById("measurementModalLabel").innerText =
@@ -294,7 +312,8 @@ FitLife {% endblock %} {% block content %}
     modal.show();
   }
 
-  function deleteMeasurement(id) {
+  function deleteMeasurement(button) {
+    const id = button.getAttribute("data-id");
     if (confirm("Are you sure you want to delete this measurement?")) {
       fetch(`/measurements/${id}/delete/`, {
         method: "DELETE",
@@ -305,7 +324,16 @@ FitLife {% endblock %} {% block content %}
       })
         .then((response) => {
           if (response.ok) {
-            document.getElementById(`measurement-${id}`).remove();
+            const row = document.getElementById(`measurement-${id}`);
+            row.remove();
+
+            // Check if there are any remaining measurements
+            const tableBody = document.getElementById("measurementTableBody");
+            if (tableBody.children.length === 0) {
+              // Show the friendly message
+              document.getElementById("noMeasurementsMessage").style.display =
+                "block";
+            }
           }
         })
         .catch((error) => console.error("Error:", error));
@@ -321,10 +349,26 @@ FitLife {% endblock %} {% block content %}
       const data = Object.fromEntries(formData);
       for (const key in data) {
         if (data[key] === "") {
-          data[key] = null; // Set empty fields to null or handle as needed
+          data[key] = null;
         } else {
-          data[key] = data[key].trim(); // Trim whitespace
+          data[key] = data[key].trim();
         }
+      }
+
+      // Validate that numbers are greater than 0
+      if (
+        !validatePositiveNumber(parseFloat(data.weight)) ||
+        !validatePositiveNumber(parseFloat(data.height)) ||
+        !validatePositiveNumber(parseFloat(data.chest)) ||
+        !validatePositiveNumber(parseFloat(data.waist)) ||
+        !validatePositiveNumber(parseFloat(data.hips)) ||
+        !validatePositiveNumber(parseFloat(data.thighs)) ||
+        !validatePositiveNumber(parseFloat(data.calves)) ||
+        !validatePositiveNumber(parseFloat(data.left_arm)) ||
+        !validatePositiveNumber(parseFloat(data.right_arm))
+      ) {
+        alert("All measurement values must be greater than 0.");
+        return;
       }
 
       const measurementId = data.id;
@@ -346,7 +390,6 @@ FitLife {% endblock %} {% block content %}
           if (data.success) {
             const tableBody = document.getElementById("measurementTableBody");
             if (measurementId) {
-              // Update existing measurement
               const row = document.getElementById(
                 `measurement-${measurementId}`
               );
@@ -361,23 +404,16 @@ FitLife {% endblock %} {% block content %}
                 <td>${data.measurement.left_arm}</td>
                 <td>${data.measurement.right_arm}</td>
                 <td>${data.measurement.unit}</td>
-                <td>${
-                  data.measurement.notes || ""
-                }</td> <!-- Updated to include notes -->
+                <td>${data.measurement.notes || ""}</td>
                 <td>
                   <button class="btn btn-warning btn-edit" data-id="${
                     data.measurement.id
-                  }" onclick="editMeasurement(${
-                data.measurement.id
-              })">Edit</button>
+                  }" onclick="editMeasurement(this)">Edit</button>
                   <button class="btn btn-danger btn-delete" data-id="${
                     data.measurement.id
-                  }" onclick="deleteMeasurement(${
-                data.measurement.id
-              })">Delete</button>
+                  }" onclick="deleteMeasurement(this)">Delete</button>
                 </td>`;
             } else {
-              // Add new measurement
               const newRow = `<tr id="measurement-${data.measurement.id}">
                 <td>${data.measurement.weight}</td>
                 <td>${data.measurement.height}</td>
@@ -389,23 +425,21 @@ FitLife {% endblock %} {% block content %}
                 <td>${data.measurement.left_arm}</td>
                 <td>${data.measurement.right_arm}</td>
                 <td>${data.measurement.unit}</td>
-                <td>${
-                  data.measurement.notes || ""
-                }</td> <!-- Updated to include notes -->
+                <td>${data.measurement.notes || ""}</td>
                 <td>
                   <button class="btn btn-warning btn-edit" data-id="${
                     data.measurement.id
-                  }" onclick="editMeasurement(${
-                data.measurement.id
-              })">Edit</button>
+                  }" onclick="editMeasurement(this)">Edit</button>
                   <button class="btn btn-danger btn-delete" data-id="${
                     data.measurement.id
-                  }" onclick="deleteMeasurement(${
-                data.measurement.id
-              })">Delete</button>
+                  }" onclick="deleteMeasurement(this)">Delete</button>
                 </td>
               </tr>`;
               tableBody.innerHTML += newRow;
+
+              // Hide the friendly message when a measurement is added
+              document.getElementById("noMeasurementsMessage").style.display =
+                "none";
             }
             form.reset();
             const modal = bootstrap.Modal.getInstance(
