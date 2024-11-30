@@ -1,5 +1,5 @@
-{% extends "base.html" %} {% load static %} {% block title %}Measurement List -
-FitLife{% endblock %} {% block content %}
+{% extends "base.html" %} {% load static %} {% block title %} Measurement List -
+FitLife {% endblock %} {% block content %}
 <section class="custom-bg-light-blue py-5 mb-5 section-header">
   <div class="container">
     <div class="row justify-content-center">
@@ -37,60 +37,63 @@ FitLife{% endblock %} {% block content %}
     <strong>Start by adding your first measurement!</strong>
   </div>
 
-  <div id="measurementTableContainer" style="display: none">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Weight</th>
-          <th>Height</th>
-          <th>Chest</th>
-          <th>Waist</th>
-          <th>Hips</th>
-          <th>Thighs</th>
-          <th>Calves</th>
-          <th>Left Arm</th>
-          <th>Right Arm</th>
-          <th>Unit</th>
-          <th>Notes</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="measurementTableBody">
-        {% for measurement in measurements %}
-        <tr id="measurement-{{ measurement.id }}">
-          <td>{{ measurement.weight }}</td>
-          <td>{{ measurement.height }}</td>
-          <td>{{ measurement.chest }}</td>
-          <td>{{ measurement.waist }}</td>
-          <td>{{ measurement.hips }}</td>
-          <td>{{ measurement.thighs }}</td>
-          <td>{{ measurement.calves }}</td>
-          <td>{{ measurement.left_arm }}</td>
-          <td>{{ measurement.right_arm }}</td>
-          <td>{{ measurement.unit }}</td>
-          <td>{{ measurement.notes }}</td>
-          <td>
-            <button
-              class="btn btn-warning btn-edit"
-              data-id="{{ measurement.id }}"
-              onclick="editMeasurement(this)"
-            >
-              Edit
-            </button>
-            <button
-              class="btn btn-danger btn-delete"
-              data-id="{{ measurement.id }}"
-              onclick="deleteMeasurement(this)"
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+  {% if measurements %}
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Weight</th>
+        <th>Height</th>
+        <th>Chest</th>
+        <th>Waist</th>
+        <th>Hips</th>
+        <th>Thighs</th>
+        <th>Calves</th>
+        <th>Left Arm</th>
+        <th>Right Arm</th>
+        <th>Unit</th>
+        <th>Notes</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="measurementTableBody">
+      {% for measurement in measurements %}
+      <tr id="measurement-{{ measurement.id }}">
+        <td>{{ measurement.weight }}</td>
+        <td>{{ measurement.height }}</td>
+        <td>{{ measurement.chest }}</td>
+        <td>{{ measurement.waist }}</td>
+        <td>{{ measurement.hips }}</td>
+        <td>{{ measurement.thighs }}</td>
+        <td>{{ measurement.calves }}</td>
+        <td>{{ measurement.left_arm }}</td>
+        <td>{{ measurement.right_arm }}</td>
+        <td>{{ measurement.unit }}</td>
+        <td>{{ measurement.notes }}</td>
+        <td>
+          <button
+            class="btn btn-warning btn-edit"
+            data-id="{{ measurement.id }}"
+            onclick="editMeasurement(this)"
+          >
+            Edit
+          </button>
+          <button
+            class="btn btn-danger btn-delete"
+            data-id="{{ measurement.id }}"
+            onclick="deleteMeasurement(this)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
   {% else %}
+  <script>
+    document.getElementById("noMeasurementsMessage").style.display = "block";
+  </script>
+  {% endif %} {% else %}
   <div class="alert alert-warning" role="alert">
     Please log in to start tracking your measurements.
     <button
@@ -280,7 +283,7 @@ FitLife{% endblock %} {% block content %}
   }
 
   function validatePositiveNumber(value) {
-    return value > 0;
+    return value > 0; // Ensure value is greater than 0
   }
 
   function editMeasurement(button) {
@@ -319,22 +322,15 @@ FitLife{% endblock %} {% block content %}
           "X-CSRFToken": "{{ csrf_token }}",
         },
       })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
+        .then((response) => {
+          if (response.ok) {
             const row = document.getElementById(`measurement-${id}`);
             row.remove();
 
-            if (data.has_measurements) {
-              document.getElementById(
-                "measurementTableContainer"
-              ).style.display = "block";
-              document.getElementById("noMeasurementsMessage").style.display =
-                "none";
-            } else {
-              document.getElementById(
-                "measurementTableContainer"
-              ).style.display = "none";
+            // Check if there are any remaining measurements
+            const tableBody = document.getElementById("measurementTableBody");
+            if (tableBody.children.length === 0) {
+              // Show the friendly message
               document.getElementById("noMeasurementsMessage").style.display =
                 "block";
             }
@@ -359,16 +355,17 @@ FitLife{% endblock %} {% block content %}
         }
       }
 
+      // Validate that numbers are greater than 0
       if (
         !validatePositiveNumber(parseFloat(data.weight)) ||
         !validatePositiveNumber(parseFloat(data.height)) ||
-        (data.chest && !validatePositiveNumber(parseFloat(data.chest))) ||
-        (data.waist && !validatePositiveNumber(parseFloat(data.waist))) ||
-        (data.hips && !validatePositiveNumber(parseFloat(data.hips))) ||
-        (data.thighs && !validatePositiveNumber(parseFloat(data.thighs))) ||
-        (data.calves && !validatePositiveNumber(parseFloat(data.calves))) ||
-        (data.left_arm && !validatePositiveNumber(parseFloat(data.left_arm))) ||
-        (data.right_arm && !validatePositiveNumber(parseFloat(data.right_arm)))
+        !validatePositiveNumber(parseFloat(data.chest)) ||
+        !validatePositiveNumber(parseFloat(data.waist)) ||
+        !validatePositiveNumber(parseFloat(data.hips)) ||
+        !validatePositiveNumber(parseFloat(data.thighs)) ||
+        !validatePositiveNumber(parseFloat(data.calves)) ||
+        !validatePositiveNumber(parseFloat(data.left_arm)) ||
+        !validatePositiveNumber(parseFloat(data.right_arm))
       ) {
         alert("All measurement values must be greater than 0.");
         return;
@@ -397,80 +394,62 @@ FitLife{% endblock %} {% block content %}
                 `measurement-${measurementId}`
               );
               row.innerHTML = `
-                            <td>${data.measurement.weight}</td>
-                            <td>${data.measurement.height}</td>
-                            <td>${data.measurement.chest}</td>
-                            <td>${data.measurement.waist}</td>
-                            <td>${data.measurement.hips}</td>
-                            <td>${data.measurement.thighs}</td>
-                            <td>${data.measurement.calves}</td>
-                            <td>${data.measurement.left_arm}</td>
-                            <td>${data.measurement.right_arm}</td>
-                            <td>${data.measurement.unit}</td>
-                            <td>${data.measurement.notes || ""}</td>
-                            <td>
-                                <button class="btn btn-warning btn-edit" data-id="${
-                                  data.measurement.id
-                                }" onclick="editMeasurement(this)">Edit</button>
-                                <button class="btn btn-danger btn-delete" data-id="${
-                                  data.measurement.id
-                                }" onclick="deleteMeasurement(this)">Delete</button>
-                            </td>`;
+                <td>${data.measurement.weight}</td>
+                <td>${data.measurement.height}</td>
+                <td>${data.measurement.chest}</td>
+                <td>${data.measurement.waist}</td>
+                <td>${data.measurement.hips}</td>
+                <td>${data.measurement.thighs}</td>
+                <td>${data.measurement.calves}</td>
+                <td>${data.measurement.left_arm}</td>
+                <td>${data.measurement.right_arm}</td>
+                <td>${data.measurement.unit}</td>
+                <td>${data.measurement.notes || ""}</td>
+                <td>
+                  <button class="btn btn-warning btn-edit" data-id="${
+                    data.measurement.id
+                  }" onclick="editMeasurement(this)">Edit</button>
+                  <button class="btn btn-danger btn-delete" data-id="${
+                    data.measurement.id
+                  }" onclick="deleteMeasurement(this)">Delete</button>
+                </td>`;
             } else {
               const newRow = `<tr id="measurement-${data.measurement.id}">
-                            <td>${data.measurement.weight}</td>
-                            <td>${data.measurement.height}</td>
-                            <td>${data.measurement.chest}</td>
-                            <td>${data.measurement.waist}</td>
-                            <td>${data.measurement.hips}</td>
-                            <td>${data.measurement.thighs}</td>
-                            <td>${data.measurement.calves}</td>
-                            <td>${data.measurement.left_arm}</td>
-                            <td>${data.measurement.right_arm}</td>
-                            <td>${data.measurement.unit}</td>
-                            <td>${data.measurement.notes || ""}</td>
-                            <td>
-                                <button class="btn btn-warning btn-edit" data-id="${
-                                  data.measurement.id
-                                }" onclick="editMeasurement(this)">Edit</button>
-                                <button class="btn btn-danger btn-delete" data-id="${
-                                  data.measurement.id
-                                }" onclick="deleteMeasurement(this)">Delete</button>
-                            </td>
-                        </tr>`;
+                <td>${data.measurement.weight}</td>
+                <td>${data.measurement.height}</td>
+                <td>${data.measurement.chest}</td>
+                <td>${data.measurement.waist}</td>
+                <td>${data.measurement.hips}</td>
+                <td>${data.measurement.thighs}</td>
+                <td>${data.measurement.calves}</td>
+                <td>${data.measurement.left_arm}</td>
+                <td>${data.measurement.right_arm}</td>
+                <td>${data.measurement.unit}</td>
+                <td>${data.measurement.notes || ""}</td>
+                <td>
+                  <button class="btn btn-warning btn-edit" data-id="${
+                    data.measurement.id
+                  }" onclick="editMeasurement(this)">Edit</button>
+                  <button class="btn btn-danger btn-delete" data-id="${
+                    data.measurement.id
+                  }" onclick="deleteMeasurement(this)">Delete</button>
+                </td>
+              </tr>`;
               tableBody.innerHTML += newRow;
+
+              // Hide the friendly message when a measurement is added
+              document.getElementById("noMeasurementsMessage").style.display =
+                "none";
             }
-            document.getElementById("measurementTableContainer").style.display =
-              "block";
-            document.getElementById("noMeasurementsMessage").style.display =
-              "none";
             form.reset();
             const modal = bootstrap.Modal.getInstance(
               document.getElementById("measurementModal")
             );
             modal.hide();
-          } else {
-            alert("Error saving measurement. Please try again.");
           }
         })
         .catch((error) => console.error("Error:", error));
     });
-  });
-
-  // Initial setup
-  document.addEventListener("DOMContentLoaded", function () {
-    const tableBody = document.getElementById("measurementTableBody");
-    const tableContainer = document.getElementById("measurementTableContainer");
-    const noMeasurementsMessage = document.getElementById(
-      "noMeasurementsMessage"
-    );
-    if (tableBody.children.length > 0) {
-      tableContainer.style.display = "block";
-      noMeasurementsMessage.style.display = "none";
-    } else {
-      tableContainer.style.display = "none";
-      noMeasurementsMessage.style.display = "block";
-    }
   });
 </script>
 {% endblock %}
