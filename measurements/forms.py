@@ -5,7 +5,7 @@ class MeasurementForm(forms.ModelForm):
     class Meta:
         model = Measurement
         fields = [
-            'weight', 'height', 'chest', 'waist', 'hips', 
+            'weight', 'height', 'chest', 'waist', 'hips',
             'thighs', 'calves', 'left_arm', 'right_arm', 'unit', 'notes'
         ]
         widgets = {

@@ -1,16 +1,17 @@
+# models.py
 from djongo import models
 
 class Measurement(models.Model):
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='measurements')  # Added related_name
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='measurements')
     weight = models.DecimalField(max_digits=5, decimal_places=2)
     height = models.DecimalField(max_digits=5, decimal_places=2)
-    chest = models.DecimalField(max_digits=5, decimal_places=2)
-    waist = models.DecimalField(max_digits=5, decimal_places=2)
-    hips = models.DecimalField(max_digits=5, decimal_places=2)
-    thighs = models.DecimalField(max_digits=5, decimal_places=2)
-    calves = models.DecimalField(max_digits=5, decimal_places=2)
-    left_arm = models.DecimalField(max_digits=5, decimal_places=2)
-    right_arm = models.DecimalField(max_digits=5, decimal_places=2)
+    chest = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    waist = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    hips = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    thighs = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    calves = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    left_arm = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    right_arm = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     unit = models.CharField(max_length=10)
     notes = models.TextField(blank=True)
 
@@ -20,13 +21,13 @@ class Measurement(models.Model):
             'user_id': str(self.user.pk),
             'weight': str(self.weight),
             'height': str(self.height),
-            'chest': str(self.chest),
-            'waist': str(self.waist),
-            'hips': str(self.hips),
-            'thighs': str(self.thighs),
-            'calves': str(self.calves),
-            'left_arm': str(self.left_arm),
-            'right_arm': str(self.right_arm),
+            'chest': str(self.chest) if self.chest else None,
+            'waist': str(self.waist) if self.waist else None,
+            'hips': str(self.hips) if self.hips else None,
+            'thighs': str(self.thighs) if self.thighs else None,
+            'calves': str(self.calves) if self.calves else None,
+            'left_arm': str(self.left_arm) if self.left_arm else None,
+            'right_arm': str(self.right_arm) if self.right_arm else None,
             'unit': self.unit,
             'notes': self.notes,
         }

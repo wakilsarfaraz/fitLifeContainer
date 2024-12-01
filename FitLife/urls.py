@@ -10,5 +10,5 @@ urlpatterns = [
     path('classes/', include(('classes.urls', 'classes'), namespace='classes')),
     path('workouts/', include(('workouts.urls', 'workouts'), namespace='workouts')),
     path('userauth/', include(('userauth.urls', 'userauth'), namespace='userauth')),
-    path('measurements/', include('measurements.urls')),
+    path('measurements/', include(('measurements.urls', 'measurements'), namespace='measurements')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

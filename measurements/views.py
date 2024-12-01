@@ -1,4 +1,6 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
 from .models import Measurement
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -7,7 +9,7 @@ from django.db.models import Min
 
 def measurement_list(request):
     if request.user.is_authenticated:
-        measurements = request.user.measurements.all()  # Now this should work correctly
+        measurements = request.user.measurements.all()  # Fetching user's measurements
     else:
         measurements = []  # No measurements for anonymous users
     return render(request, 'measurement_list.html', {'measurements': measurements})
@@ -61,15 +63,14 @@ def edit_measurement(request, pk):
     
     return JsonResponse({'success': False}, status=400)
 
-@csrf_exempt  # Use with caution
-def delete_measurement(request, pk):
-    measurement = get_object_or_404(Measurement, pk=pk)
-    if measurement.user != request.user:
-        return JsonResponse({'success': False, 'error': 'Not authorized'}, status=403)
-    
-    measurement.delete()
-    
-    # Check if there are any remaining measurements
-    remaining_measurements = Measurement.objects.filter(user=request.user).exists()
-    
-    return JsonResponse({'success': True, 'has_measurements': remaining_measurements})
+# Delete Measurement View
+class DeleteMeasurementView(View):
+    def post(self, request, pk):
+        measurement = get_object_or_404(Measurement, pk=pk)
+        if measurement.user != request.user:
+            messages.error(request, "You are not authorized to delete this measurement.")
+            return redirect('measurement_list')  
+
+        measurement.delete()
+        messages.success(request, "Your measurement has been deleted.")
+        return redirect('measurements:measurement_list') 
