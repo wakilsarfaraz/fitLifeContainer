@@ -1,5 +1,5 @@
-{% extends "base.html" %} {% load static %} {% block title %}Measurement List -
-FitLife{% endblock %} {% block content %}
+{% extends "base.html" %} {% load static %} {% block title %} Measurement List -
+FitLife {% endblock %} {% block content %}
 <section class="custom-bg-light-blue py-5 mb-5 section-header">
   <div class="container">
     <div class="row justify-content-center">
@@ -329,6 +329,9 @@ FitLife{% endblock %} {% block content %}
           </div>
           <button type="submit" class="btn btn-primary">Save</button>
         </form>
+
+        <!-- Error Message Display -->
+        <div id="errorMessages" style="color: red; display: none"></div>
       </div>
     </div>
   </div>
@@ -436,6 +439,7 @@ FitLife{% endblock %} {% block content %}
   function openModal() {
     document.getElementById("measurementForm").reset(); // Reset form
     document.getElementById("measurementId").value = ""; // Clear ID
+    document.getElementById("errorMessages").style.display = "none"; // Hide error messages
   }
 
   // Function to set the measurement ID for deletion
@@ -446,7 +450,6 @@ FitLife{% endblock %} {% block content %}
       .setAttribute("data-id", measurementId);
   }
 
-  // Function to edit a measurement
   // Function to edit a measurement
   function editMeasurement(button) {
     const measurementId = button.getAttribute("data-id");
@@ -490,6 +493,7 @@ FitLife{% endblock %} {% block content %}
     );
     measurementModal.show();
   }
+
   // Handle form submission for adding/editing measurements
   document
     .getElementById("measurementForm")
@@ -529,7 +533,18 @@ FitLife{% endblock %} {% block content %}
           if (data.success) {
             location.reload(); // Refresh page or update UI dynamically
           } else {
-            document.getElementById("errorMessage").innerHTML = data.error;
+            // Prepare to display multiple error messages
+            let errorMessages = "";
+            if (data.errors) {
+              for (const [field, errors] of Object.entries(data.errors)) {
+                errorMessages += `${field}: ${errors.join(", ")}<br>`;
+              }
+            } else {
+              // If there's a single error message
+              errorMessages = data.error || "An unknown error occurred.";
+            }
+
+            document.getElementById("errorMessage").innerHTML = errorMessages;
             var errorModal = new bootstrap.Modal(
               document.getElementById("errorModal")
             );
@@ -559,11 +574,16 @@ FitLife{% endblock %} {% block content %}
             var deleteModal = bootstrap.Modal.getInstance(
               document.getElementById("deleteMeasurementModal")
             );
-            deleteModal.hide();
+            deleteModal.hide(); // Hide the delete confirmation modal
           } else {
-            alert(data.error);
+            document.getElementById("errorMessage").innerHTML = data.error;
+            var errorModal = new bootstrap.Modal(
+              document.getElementById("errorModal")
+            );
+            errorModal.show();
           }
-        });
+        })
+        .catch((error) => console.error("Error:", error));
     });
 
   // Function to get CSRF token for AJAX requests

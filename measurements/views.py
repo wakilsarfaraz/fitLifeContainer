@@ -4,10 +4,8 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.decorators.csrf import csrf_protect
 from .models import Measurement
-from .forms import MeasurementForm  # Make sure to import your form
+from .forms import MeasurementForm  # Import the form
 import json
-from datetime import datetime
-from django.utils.dateparse import parse_datetime
 from django.utils import timezone
 
 @login_required
@@ -30,6 +28,7 @@ def add_measurement(request):
             measurement.save()  # Now save the instance
             return JsonResponse({'success': True, 'measurement': measurement.to_dict()}, status=201)
         else:
+            # Return form errors as a JSON response
             return JsonResponse({'success': False, 'errors': form.errors}, status=400)
 
     return JsonResponse({'success': False}, status=400)
@@ -43,17 +42,17 @@ def edit_measurement(request, pk):
 
     if request.method == 'POST':
         data = json.loads(request.body)
-        form = MeasurementForm(data, instance=measurement)  # Validate with the existing instance
+        form = MeasurementForm(data, instance=measurement)  # Bind the form to the instance
 
         if form.is_valid():
-            form.save()  # Save the validated data
+            form.save()
             return JsonResponse({'success': True, 'measurement': measurement.to_dict()})
         else:
+            # Log form errors for debugging and return them in the response
             return JsonResponse({'success': False, 'errors': form.errors}, status=400)
 
     return JsonResponse({'success': False}, status=400)
 
-# Delete Measurement View
 class DeleteMeasurementView(View):
     def post(self, request, pk):
         measurement = get_object_or_404(Measurement, pk=pk)
