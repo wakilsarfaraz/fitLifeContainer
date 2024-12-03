@@ -35,7 +35,7 @@
       class="col-md-4 mb-4 workout-item"
       data-category="{{ workout.category }}"
     >
-      <div class="card">
+      <div class="card workout-card">
         <div class="card-body">
           <h5 class="card-title">{{ workout.title }}</h5>
           <p class="card-text">{{ workout.description }}</p>
@@ -74,6 +74,14 @@
 
   .btn-outline-primary {
     transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  .workout-card {
+    transition: transform 0.3s ease; /* Smooth transition */
+  }
+
+  .workout-card:hover {
+    transform: scale(1.05); /* Increase size on hover */
   }
 </style>
 

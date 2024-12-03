@@ -230,3 +230,11 @@ footer p {
 footer {
   flex-shrink: 0; /* Prevent the footer from shrinking */
 }
+
+.card {
+  transition: transform 0.3s ease; /* Smooth transition for the card */
+}
+
+.card:hover {
+  transform: scale(1.05); /* Scale up the entire card on hover */
+}

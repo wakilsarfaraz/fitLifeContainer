@@ -2,18 +2,17 @@
 {% endblock %} {% block content %}
 <!-- Hero Section -->
 <section
-  style="
-    background-image: url('../static/images/hero-header.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-  "
-  class="hero-bg-img hero-section text-center py-5"
+  class="custom-bg-light-blue hero-section text-center py-5 position-relative"
 >
-  <div class="container">
-    <h1>Welcome to FitLife</h1>
-    <p>Your fitness journey starts here</p>
+  <div class="overlay"></div>
+  <!-- Gradient Overlay -->
+  <div class="container position-relative z-index-1">
+    <h1 class="display-4 text-white font-weight-bold">Welcome to FitLife</h1>
+    <p class="lead text-light">Your fitness journey starts here</p>
     <p class="text-muted">Get inspired and stay healthy</p>
+    <a href="{% url 'userauth:login' %}" class="btn btn-light btn-lg mt-3"
+      >Get Started</a
+    >
   </div>
 </section>
 
@@ -48,13 +47,13 @@
 <!-- Membership Plans Section -->
 <section id="membership-plans" class="py-5 bg-light mb-5">
   <div class="container">
-    <h2 class="text-center display-5 mb-4">Membership Plans</h2>
+    <h2 class="text-center display-5 mb-4 text-primary">Membership Plans</h2>
     <div class="row justify-content-center">
       <div class="col-md-4 mb-4">
-        <div class="card shadow-sm border-0 h-100">
+        <div class="card shadow border-0 h-100 rounded">
           <div class="card-body text-center">
-            <h5 class="card-title text-primary">Basic Plan</h5>
-            <p class="card-text text-muted">25BD/month</p>
+            <h5 class="card-title text-primary font-weight-bold">Basic Plan</h5>
+            <p class="card-text text-muted fs-5">25BD/month</p>
             <ul class="list-unstyled text-muted">
               <li>Access to gym equipment</li>
               <li>Locker facility</li>
@@ -64,10 +63,12 @@
         </div>
       </div>
       <div class="col-md-4 mb-4">
-        <div class="card shadow-sm border-0 h-100">
+        <div class="card shadow border-0 h-100 rounded">
           <div class="card-body text-center">
-            <h5 class="card-title text-primary">Premium Plan</h5>
-            <p class="card-text text-muted">35BD/month</p>
+            <h5 class="card-title text-primary font-weight-bold">
+              Premium Plan
+            </h5>
+            <p class="card-text text-muted fs-5">35BD/month</p>
             <ul class="list-unstyled text-muted">
               <li>All Basic Plan features</li>
               <li>Unlimited group classes</li>
@@ -77,10 +78,10 @@
         </div>
       </div>
       <div class="col-md-4 mb-4">
-        <div class="card shadow-sm border-0 h-100">
+        <div class="card shadow border-0 h-100 rounded">
           <div class="card-body text-center">
-            <h5 class="card-title text-primary">Elite Plan</h5>
-            <p class="card-text text-muted">50BD/month</p>
+            <h5 class="card-title text-primary font-weight-bold">Elite Plan</h5>
+            <p class="card-text text-muted fs-5">50BD/month</p>
             <ul class="list-unstyled text-muted">
               <li>All Premium Plan features</li>
               <li>Personal trainer sessions</li>
@@ -100,10 +101,20 @@
   </div>
 </section>
 
-<!-- Nutrition Tips Slider Section -->
+<style>
+  .card {
+    transition: transform 0.3s ease; /* Smooth transition for the card */
+  }
+
+  .card:hover {
+    transform: scale(1.05); /* Scale up the entire card on hover */
+  }
+</style>
+
+<!-- Nutrition Tips Section -->
 <section id="nutrition-tips" class="py-5 bg-light">
   <div class="container">
-    <h2 class="text-center display-5 mb-5">Nutrition Tips</h2>
+    <h2 class="text-center display-5 mb-5 text-primary">Nutrition Tips</h2>
     <div
       id="nutritionTipsCarousel"
       class="carousel slide"
@@ -112,20 +123,27 @@
       <div class="carousel-inner">
         {% for tip in nutrition_tips %}
         <div class="carousel-item {% if forloop.first %}active{% endif %}">
-          <div class="d-flex justify-content-center align-items-center">
-            <!-- Image on the left -->
-            <div class="me-4">
-              <img
-                src="{% static 'images/'|add:tip.image %}"
-                class="img-fluid rounded mb-4"
-                alt="{{ tip.title }}"
-                style="max-width: 200px; height: 200px; object-fit: cover"
-              />
-            </div>
-            <!-- Text on the right -->
-            <div>
-              <h5 class="fw-bold text-primary">{{ tip.title }}</h5>
-              <p class="text-muted">{{ tip.description }}</p>
+          <div
+            class="card mx-auto border-0"
+            style="max-width: 900px; padding: 20px"
+          >
+            <div class="row g-0 align-items-center">
+              <div class="col-md-6 text-center">
+                <img
+                  src="{% static 'images/'|add:tip.image %}"
+                  class="img-fluid rounded-circle border border-primary mb-3"
+                  alt="{{ tip.title }}"
+                  style="width: 200px; height: 200px; object-fit: cover"
+                />
+              </div>
+              <div class="col-md-6">
+                <div class="card-body">
+                  <h5 class="card-title fw-bold text-primary">
+                    {{ tip.title }}
+                  </h5>
+                  <p class="card-text text-muted">{{ tip.description }}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -137,8 +155,12 @@
         type="button"
         data-bs-target="#nutritionTipsCarousel"
         data-bs-slide="prev"
+        style="background-color: transparent"
       >
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span
+          class="carousel-control-prev-icon"
+          style="background-color: black"
+        ></span>
         <span class="visually-hidden">Previous</span>
       </button>
       <button
@@ -146,8 +168,12 @@
         type="button"
         data-bs-target="#nutritionTipsCarousel"
         data-bs-slide="next"
+        style="background-color: transparent"
       >
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span
+          class="carousel-control-next-icon"
+          style="background-color: black"
+        ></span>
         <span class="visually-hidden">Next</span>
       </button>
     </div>

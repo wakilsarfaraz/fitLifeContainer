@@ -1,12 +1,11 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 
-<!-- Title Section -->
 <section class="custom-bg-light-blue py-5 mb-5 classes-container">
   <div class="container text-center">
     <h1 class="display-4 fw-bold mb-4">Our Classes</h1>
     <p class="lead mb-4">
       Explore our wide range of fitness classes and find the one that fits you
-      best. Join us and start your fitness journey today!
+      best.
     </p>
     {% if user.is_authenticated %}
     <div class="btn-group mb-3" role="group">
@@ -25,37 +24,47 @@
   </div>
 </section>
 
-<!-- Classes Section -->
 <div class="container">
   <div class="row">
     {% if classes %} {% for class in classes %}
     <div class="col-md-4 mb-3">
-      <div class="card d-flex flex-column" style="height: 450px">
+      <div class="card class-card">
         <img
           src="{{ class.image.url }}"
-          class="card-img-top img-fluid"
+          class="card-img-top"
           alt="{{ class.name }}"
-          style="height: 200px; object-fit: cover"
         />
-        <div
-          class="card-body d-flex flex-column justify-content-between"
-          style="flex-grow: 1"
-        >
+        <div class="card-body">
           <h5 class="card-title">{{ class.name }}</h5>
           <p class="card-text">{{ class.description }}</p>
+          <p>Location: {{ class.location }}</p>
           <p>Day: {{ class.day_of_week }}</p>
           <p>Time: {{ class.time }}</p>
-          {% if user.is_authenticated %}
-          <button
-            type="button"
-            class="btn {% if class.id in my_classes %}btn-danger{% else %}btn-primary{% endif %} class-action-btn"
-            data-action="{% if class.id in my_classes %}remove{% else %}add{% endif %}"
-            data-class-id="{{ class.id }}"
+          <p>Remainig Capacity: {{ class.capacity }} / 30</p>
+
+          {% if user.is_authenticated %} {% if class.id in my_classes %}
+          <form
+            action="{% url 'classes:remove_from_my_classes' class.id %}"
+            method="post"
+            style="display: inline"
           >
-            {% if class.id in my_classes %}Remove from My Classes{% else %}Add
-            to My Classes{% endif %}
-          </button>
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+              Remove from My Classes
+            </button>
+          </form>
           {% else %}
+          <form
+            action="{% url 'classes:add_to_my_classes' class.id %}"
+            method="post"
+            style="display: inline"
+          >
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+              Add to My Classes
+            </button>
+          </form>
+          {% endif %} {% else %}
           <a href="{% url 'userauth:login' %}" class="btn btn-primary"
             >Login to Add</a
           >
@@ -65,108 +74,53 @@
     </div>
     {% endfor %} {% else %}
     <div class="col-12 text-center">
-      <p class="text-muted">
-        {% if request.resolver_match.url_name == 'my_classes' %}You haven't
-        added any classes yet.{% else %}No classes are available at the
-        moment.{% endif %}
-      </p>
+      <p class="text-muted">No classes are available at the moment.</p>
     </div>
     {% endif %}
   </div>
 </div>
 
-<!-- Confirmation Modal -->
-<div
-  class="modal fade"
-  id="confirmationModal"
-  tabindex="-1"
-  aria-labelledby="confirmationModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to <span id="actionText"></span> this class
-        <span id="actionPreposition"></span> your classes?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Cancel
-        </button>
-        <button type="button" class="btn btn-primary" id="confirmActionBtn">
-          Confirm
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const modal = new bootstrap.Modal(
-      document.getElementById("confirmationModal")
-    );
-    const confirmActionBtn = document.getElementById("confirmActionBtn");
-    const actionText = document.getElementById("actionText");
-    const actionPreposition = document.getElementById("actionPreposition");
+  // Handle button click responses
+  document.querySelectorAll("form").forEach((form) => {
+    form.onsubmit = function (event) {
+      event.preventDefault(); // Prevent the default form submission
+      const actionUrl = this.action; // Get the action URL
+      const method = this.method; // Get the method
+      const formData = new FormData(this); // Create form data object
 
-    document.querySelectorAll(".class-action-btn").forEach((button) => {
-      button.addEventListener("click", function () {
-        const action = this.dataset.action;
-        const classId = this.dataset.classId;
-        actionText.textContent = action === "add" ? "add" : "remove";
-        actionPreposition.textContent = action === "add" ? "to" : "from";
-        confirmActionBtn.dataset.action = action;
-        confirmActionBtn.dataset.classId = classId;
-        modal.show();
-      });
-    });
-
-    confirmActionBtn.addEventListener("click", function () {
-      const action = this.dataset.action;
-      const classId = this.dataset.classId;
-      const url = `/classes/${classId}/${action}/`;
-
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "X-CSRFToken": getCookie("csrftoken"),
-          "Content-Type": "application/json",
-        },
+      fetch(actionUrl, {
+        method: method,
+        body: formData,
       })
         .then((response) => response.json())
         .then((data) => {
-          const button = document.querySelector(
-            `.class-action-btn[data-class-id="${classId}"]`
-          );
+          alert(data.message); // Show success or error message
           if (data.status === "success") {
-            button.textContent =
-              action === "add" ? "Remove from My Classes" : "Add to My Classes";
-            button.classList.toggle("btn-primary");
-            button.classList.toggle("btn-danger");
-            button.dataset.action = action === "add" ? "remove" : "add";
+            location.reload(); // Reload the page to update the class list
           }
         });
-
-      modal.hide();
-    });
-
-    function getCookie(name) {
-      return document.cookie.split("; ").reduce((acc, cookie) => {
-        const [key, value] = cookie.split("=");
-        return key === name ? decodeURIComponent(value) : acc;
-      }, null);
-    }
+    };
   });
 </script>
+
+<style>
+  .class-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+  }
+  .class-card:hover {
+    transform: scale(1.05);
+  }
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+  .card-body {
+    flex-grow: 1;
+  }
+</style>
 
 {% endblock %}
