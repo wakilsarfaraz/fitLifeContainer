@@ -38,59 +38,128 @@ FitLife{% endblock %} {% block content %}
   </div>
 
   {% if measurements %}
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Weight</th>
-        <th>Height</th>
-        <th>Chest</th>
-        <th>Waist</th>
-        <th>Hips</th>
-        <th>Thighs</th>
-        <th>Calves</th>
-        <th>Left Arm</th>
-        <th>Right Arm</th>
-        <th>Unit</th>
-        <th>Notes</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="measurementTableBody">
-      {% for measurement in measurements %}
-      <tr id="measurement-{{ measurement.id }}">
-        <td>{{ measurement.weight }}</td>
-        <td>{{ measurement.height }}</td>
-        <td>{{ measurement.chest }}</td>
-        <td>{{ measurement.waist }}</td>
-        <td>{{ measurement.hips }}</td>
-        <td>{{ measurement.thighs }}</td>
-        <td>{{ measurement.calves }}</td>
-        <td>{{ measurement.left_arm }}</td>
-        <td>{{ measurement.right_arm }}</td>
-        <td>{{ measurement.unit }}</td>
-        <td>{{ measurement.notes }}</td>
-        <td>
-          <button
-            class="btn btn-warning btn-edit"
-            data-id="{{ measurement.id }}"
-            onclick="editMeasurement(this)"
-          >
-            Edit
-          </button>
-          <button
-            class="btn btn-danger btn-delete"
-            data-id="{{ measurement.id }}"
-            data-bs-toggle="modal"
-            data-bs-target="#deleteMeasurementModal"
-            onclick="setDeleteId(this)"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="table-responsive d-none d-md-block">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Weight</th>
+          <th>Height</th>
+          <th>Chest</th>
+          <th>Waist</th>
+          <th>Hips</th>
+          <th>Thighs</th>
+          <th>Calves</th>
+          <th>Left Arm</th>
+          <th>Right Arm</th>
+          <th>Unit</th>
+          <th>Notes</th>
+          <th>BMI</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="measurementTableBody">
+        {% for measurement in measurements %}
+        <tr id="measurement-{{ measurement.id }}">
+          <td>{{ measurement.weight }}</td>
+          <td>{{ measurement.height }}</td>
+          <td>{{ measurement.chest }}</td>
+          <td>{{ measurement.waist }}</td>
+          <td>{{ measurement.hips }}</td>
+          <td>{{ measurement.thighs }}</td>
+          <td>{{ measurement.calves }}</td>
+          <td>{{ measurement.left_arm }}</td>
+          <td>{{ measurement.right_arm }}</td>
+          <td>{{ measurement.unit }}</td>
+          <td>{{ measurement.notes }}</td>
+          <td>{{ measurement.bmi }}</td>
+          <td>{{ measurement.date }}</td>
+          <td>
+            <button
+              class="btn btn-warning btn-edit"
+              data-id="{{ measurement.id }}"
+              onclick="editMeasurement(this)"
+            >
+              Edit
+            </button>
+            <button
+              class="btn btn-danger btn-delete"
+              data-id="{{ measurement.id }}"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteMeasurementModal"
+              onclick="setDeleteId(this)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row d-md-none">
+    {% for measurement in measurements %}
+    <div class="col-12 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <strong>Weight:</strong> {{ measurement.weight }}
+          </p>
+          <p class="card-text">
+            <strong>Height:</strong> {{ measurement.height }}
+          </p>
+          <p class="card-text">
+            <strong>Chest:</strong> {{ measurement.chest }}
+          </p>
+          <p class="card-text">
+            <strong>Waist:</strong> {{ measurement.waist }}
+          </p>
+          <p class="card-text"><strong>Hips:</strong> {{ measurement.hips }}</p>
+          <p class="card-text">
+            <strong>Thighs:</strong> {{ measurement.thighs }}
+          </p>
+          <p class="card-text">
+            <strong>Calves:</strong> {{ measurement.calves }}
+          </p>
+          <p class="card-text">
+            <strong>Left Arm:</strong> {{ measurement.left_arm }}
+          </p>
+          <p class="card-text">
+            <strong>Right Arm:</strong> {{ measurement.right_arm }}
+          </p>
+          <p class="card-text"><strong>Unit:</strong> {{ measurement.unit }}</p>
+          <p class="card-text">
+            <strong>Notes:</strong> {{ measurement.notes }}
+          </p>
+          <p class="card-text"><strong>BMI:</strong> {{ measurement.bmi }}</p>
+          <p class="card-text"><strong>Date:</strong> {{ measurement.date }}</p>
+          <div class="d-flex justify-content-between mt-3">
+            <div>
+              <button
+                class="btn btn-warning btn-edit"
+                data-id="{{ measurement.id }}"
+                onclick="editMeasurement(this)"
+              >
+                Edit
+              </button>
+              <button
+                class="btn btn-danger btn-delete"
+                data-id="{{ measurement.id }}"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteMeasurementModal"
+                onclick="setDeleteId(this)"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
   {% else %}
   <script>
     document.getElementById("noMeasurementsMessage").style.display = "block";
@@ -120,7 +189,9 @@ FitLife{% endblock %} {% block content %}
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="measurementModalLabel">Add Measurement</h5>
+        <h5 class="modal-title" id="measurementModalLabel">
+          Add/Edit Measurement
+        </h5>
         <button
           type="button"
           class="btn-close"
@@ -145,45 +216,6 @@ FitLife{% endblock %} {% block content %}
                 />
               </div>
               <div class="form-group">
-                <label for="chest">Chest</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  class="form-control"
-                  name="chest"
-                  id="chest"
-                />
-              </div>
-              <div class="form-group">
-                <label for="hips">Hips</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  class="form-control"
-                  name="hips"
-                  id="hips"
-                />
-              </div>
-              <div class="form-group">
-                <label for="calves">Calves</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  class="form-control"
-                  name="calves"
-                  id="calves"
-                />
-              </div>
-              <div class="form-group">
-                <label for="unit">Unit</label>
-                <select class="form-control" name="unit" id="unit">
-                  <option value="cm">Centimeters</option>
-                  <option value="in">Inches</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
                 <label for="height">Height</label>
                 <input
                   type="number"
@@ -192,6 +224,16 @@ FitLife{% endblock %} {% block content %}
                   name="height"
                   id="height"
                   required
+                />
+              </div>
+              <div class="form-group">
+                <label for="chest">Chest</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  name="chest"
+                  id="chest"
                 />
               </div>
               <div class="form-group">
@@ -205,6 +247,16 @@ FitLife{% endblock %} {% block content %}
                 />
               </div>
               <div class="form-group">
+                <label for="hips">Hips</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  name="hips"
+                  id="hips"
+                />
+              </div>
+              <div class="form-group">
                 <label for="thighs">Thighs</label>
                 <input
                   type="number"
@@ -214,6 +266,18 @@ FitLife{% endblock %} {% block content %}
                   id="thighs"
                 />
               </div>
+              <div class="form-group">
+                <label for="calves">Calves</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  name="calves"
+                  id="calves"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
               <div class="form-group">
                 <label for="left_arm">Left Arm</label>
                 <input
@@ -234,11 +298,34 @@ FitLife{% endblock %} {% block content %}
                   id="right_arm"
                 />
               </div>
+              <div class="form-group">
+                <label for="unit">Unit</label>
+                <select class="form-control" name="unit" id="unit">
+                  <option value="cm">Centimeters</option>
+                  <option value="in">Inches</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="notes">Notes</label>
+                <textarea
+                  class="form-control"
+                  name="notes"
+                  id="notes"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="date">Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  name="date"
+                  id="date"
+                  required
+                  max="{{ current_date }}"
+                />
+              </div>
+              <p id="bmiDisplay"></p>
             </div>
-          </div>
-          <div class="form-group">
-            <label for="notes">Notes</label>
-            <textarea class="form-control" name="notes" id="notes"></textarea>
           </div>
           <button type="submit" class="btn btn-primary">Save</button>
         </form>
@@ -313,191 +400,186 @@ FitLife{% endblock %} {% block content %}
   </div>
 </div>
 
+<!-- Error Modal -->
+<div
+  class="modal fade"
+  id="errorModal"
+  tabindex="-1"
+  aria-labelledby="errorModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Input Error</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" id="errorMessage">
+        <!-- Error message will be injected here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+  // Function to open the modal for adding measurements
   function openModal() {
-    document.getElementById("measurementForm").reset();
-    document.getElementById("measurementId").value = "";
-    document.getElementById("measurementModalLabel").innerText =
-      "Add Measurement";
+    document.getElementById("measurementForm").reset(); // Reset form
+    document.getElementById("measurementId").value = ""; // Clear ID
   }
 
-  function validatePositiveNumber(value) {
-    return value > 0; // Ensure value is greater than 0
+  // Function to set the measurement ID for deletion
+  function setDeleteId(button) {
+    const measurementId = button.getAttribute("data-id");
+    document
+      .getElementById("confirmDeleteButton")
+      .setAttribute("data-id", measurementId);
   }
 
+  // Function to edit a measurement
+  // Function to edit a measurement
   function editMeasurement(button) {
-    const id = button.getAttribute("data-id");
-    const row = document.getElementById(`measurement-${id}`);
-    const cells = row.getElementsByTagName("td");
+    const measurementId = button.getAttribute("data-id");
+    const measurementRow = document.getElementById(
+      `measurement-${measurementId}`
+    );
 
-    document.getElementById("weight").value = cells[0].innerText;
-    document.getElementById("height").value = cells[1].innerText;
-    document.getElementById("chest").value = cells[2].innerText;
-    document.getElementById("waist").value = cells[3].innerText;
-    document.getElementById("hips").value = cells[4].innerText;
-    document.getElementById("thighs").value = cells[5].innerText;
-    document.getElementById("calves").value = cells[6].innerText;
-    document.getElementById("left_arm").value = cells[7].innerText;
-    document.getElementById("right_arm").value = cells[8].innerText;
-    document.getElementById("unit").value = cells[9].innerText;
-    document.getElementById("notes").value = cells[10].innerText;
-    document.getElementById("measurementId").value = id;
+    // Populate the form with the current measurement data
+    document.getElementById("measurementId").value = measurementId;
+    document.getElementById("weight").value =
+      measurementRow.children[0].textContent;
+    document.getElementById("height").value =
+      measurementRow.children[1].textContent;
+    document.getElementById("chest").value =
+      measurementRow.children[2].textContent;
+    document.getElementById("waist").value =
+      measurementRow.children[3].textContent;
+    document.getElementById("hips").value =
+      measurementRow.children[4].textContent;
+    document.getElementById("thighs").value =
+      measurementRow.children[5].textContent;
+    document.getElementById("calves").value =
+      measurementRow.children[6].textContent;
+    document.getElementById("left_arm").value =
+      measurementRow.children[7].textContent;
+    document.getElementById("right_arm").value =
+      measurementRow.children[8].textContent;
+    document.getElementById("unit").value =
+      measurementRow.children[9].textContent;
+    document.getElementById("notes").value =
+      measurementRow.children[10].textContent;
 
-    document.getElementById("measurementModalLabel").innerText =
-      "Edit Measurement";
-    const modal = new bootstrap.Modal(
+    // Format the date to YYYY-MM-DD
+    const date = new Date(measurementRow.children[12].textContent);
+    const formattedDate = date.toISOString().split("T")[0]; // Get YYYY-MM-DD format
+    document.getElementById("date").value = formattedDate;
+
+    // Show the modal for editing
+    var measurementModal = new bootstrap.Modal(
       document.getElementById("measurementModal")
     );
-    modal.show();
+    measurementModal.show();
   }
-
-  function setDeleteId(button) {
-    const id = button.getAttribute("data-id");
-    document.getElementById("confirmDeleteButton").setAttribute("data-id", id);
-  }
-
+  // Handle form submission for adding/editing measurements
   document
-    .getElementById("confirmDeleteButton")
-    .addEventListener("click", function () {
-      const id = this.getAttribute("data-id");
+    .getElementById("measurementForm")
+    .addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent default form submission
 
-      fetch(`/measurements/${id}/delete/`, {
-        method: "POST", // Change this to POST
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          "X-CSRFToken": "{{ csrf_token }}",
-        },
-      })
-        .then((response) => {
-          if (response.ok) {
-            const row = document.getElementById(`measurement-${id}`);
-            row.remove();
+      const formData = {
+        weight: document.getElementById("weight").value,
+        height: document.getElementById("height").value,
+        chest: document.getElementById("chest").value,
+        waist: document.getElementById("waist").value,
+        hips: document.getElementById("hips").value,
+        thighs: document.getElementById("thighs").value,
+        calves: document.getElementById("calves").value,
+        left_arm: document.getElementById("left_arm").value,
+        right_arm: document.getElementById("right_arm").value,
+        unit: document.getElementById("unit").value,
+        notes: document.getElementById("notes").value,
+        date: document.getElementById("date").value,
+      };
 
-            // Check if there are any remaining measurements
-            const tableBody = document.getElementById("measurementTableBody");
-            if (tableBody.children.length === 0) {
-              document.getElementById("noMeasurementsMessage").style.display =
-                "block";
-            }
-          }
-          const modal = bootstrap.Modal.getInstance(
-            document.getElementById("deleteMeasurementModal")
-          );
-          modal.hide();
-        })
-        .catch((error) => console.error("Error:", error));
-    });
-
-  document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("measurementForm");
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData);
-      for (const key in data) {
-        if (data[key] === "") {
-          data[key] = null;
-        } else {
-          data[key] = data[key].trim();
-        }
-      }
-
-      // Validate that numbers are greater than 0
-      if (
-        !validatePositiveNumber(parseFloat(data.weight)) ||
-        !validatePositiveNumber(parseFloat(data.height)) ||
-        !validatePositiveNumber(parseFloat(data.chest)) ||
-        !validatePositiveNumber(parseFloat(data.waist)) ||
-        !validatePositiveNumber(parseFloat(data.hips)) ||
-        !validatePositiveNumber(parseFloat(data.thighs)) ||
-        !validatePositiveNumber(parseFloat(data.calves)) ||
-        !validatePositiveNumber(parseFloat(data.left_arm)) ||
-        !validatePositiveNumber(parseFloat(data.right_arm))
-      ) {
-        alert("All measurement values must be greater than 0.");
-        return;
-      }
-
-      const measurementId = data.id;
+      const measurementId = document.getElementById("measurementId").value;
       const url = measurementId
         ? `/measurements/${measurementId}/edit/`
         : "/measurements/add/";
 
       fetch(url, {
         method: "POST",
-        body: JSON.stringify(data),
         headers: {
-          "X-Requested-With": "XMLHttpRequest",
           "Content-Type": "application/json",
-          "X-CSRFToken": "{{ csrf_token }}",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            location.reload(); // Refresh page or update UI dynamically
+          } else {
+            document.getElementById("errorMessage").innerHTML = data.error;
+            var errorModal = new bootstrap.Modal(
+              document.getElementById("errorModal")
+            );
+            errorModal.show();
+          }
+        })
+        .catch((error) => console.error("Error:", error));
+    });
+
+  // Handle deletion of measurement
+  document
+    .getElementById("confirmDeleteButton")
+    .addEventListener("click", function () {
+      const measurementId = this.getAttribute("data-id");
+
+      fetch(`/measurements/${measurementId}/delete/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"),
         },
       })
         .then((response) => response.json())
         .then((data) => {
           if (data.success) {
-            const tableBody = document.getElementById("measurementTableBody");
-            if (measurementId) {
-              const row = document.getElementById(
-                `measurement-${measurementId}`
-              );
-              row.innerHTML = `
-              <td>${data.measurement.weight}</td>
-              <td>${data.measurement.height}</td>
-              <td>${data.measurement.chest}</td>
-              <td>${data.measurement.waist}</td>
-              <td>${data.measurement.hips}</td>
-              <td>${data.measurement.thighs}</td>
-              <td>${data.measurement.calves}</td>
-              <td>${data.measurement.left_arm}</td>
-              <td>${data.measurement.right_arm}</td>
-              <td>${data.measurement.unit}</td>
-              <td>${data.measurement.notes || ""}</td>
-              <td>
-                <button class="btn btn-warning btn-edit" data-id="${
-                  data.measurement.id
-                }" onclick="editMeasurement(this)">Edit</button>
-                <button class="btn btn-danger btn-delete" data-id="${
-                  data.measurement.id
-                }" data-bs-toggle="modal" data-bs-target="#deleteMeasurementModal" onclick="setDeleteId(this)">Delete</button>
-              </td>`;
-            } else {
-              const newRow = `<tr id="measurement-${data.measurement.id}">
-              <td>${data.measurement.weight}</td>
-              <td>${data.measurement.height}</td>
-              <td>${data.measurement.chest}</td>
-              <td>${data.measurement.waist}</td>
-              <td>${data.measurement.hips}</td>
-              <td>${data.measurement.thighs}</td>
-              <td>${data.measurement.calves}</td>
-              <td>${data.measurement.left_arm}</td>
-              <td>${data.measurement.right_arm}</td>
-              <td>${data.measurement.unit}</td>
-              <td>${data.measurement.notes || ""}</td>
-              <td>
-                <button class="btn btn-warning btn-edit" data-id="${
-                  data.measurement.id
-                }" onclick="editMeasurement(this)">Edit</button>
-                <button class="btn btn-danger btn-delete" data-id="${
-                  data.measurement.id
-                }" data-bs-toggle="modal" data-bs-target="#deleteMeasurementModal" onclick="setDeleteId(this)">Delete</button>
-              </td>
-            </tr>`;
-              tableBody.innerHTML += newRow;
-
-              // Hide the friendly message when a measurement is added
-              document.getElementById("noMeasurementsMessage").style.display =
-                "none";
-            }
-            form.reset();
-            const modal = bootstrap.Modal.getInstance(
-              document.getElementById("measurementModal")
+            document.getElementById(`measurement-${measurementId}`).remove(); // Remove measurement row
+            var deleteModal = bootstrap.Modal.getInstance(
+              document.getElementById("deleteMeasurementModal")
             );
-            modal.hide();
+            deleteModal.hide();
+          } else {
+            alert(data.error);
           }
-        })
-        .catch((error) => console.error("Error:", error));
+        });
     });
-  });
+
+  // Function to get CSRF token for AJAX requests
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
 </script>
 {% endblock %}
