@@ -1,4 +1,3 @@
-# models.py
 from djongo import models
 
 class Measurement(models.Model):
@@ -15,6 +14,7 @@ class Measurement(models.Model):
     unit = models.CharField(max_length=10)
     notes = models.TextField(blank=True)
     date = models.DateField(null=True, blank=True)  # Allow users to set the date
+    bmi = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)  # Add BMI field
 
     def to_dict(self):
         return {
@@ -31,7 +31,8 @@ class Measurement(models.Model):
             'right_arm': str(self.right_arm) if self.right_arm else None,
             'unit': self.unit,
             'notes': self.notes,
-            'date': self.date.isoformat() if self.date else None,  # Include the date in the dictionary
+            'date': self.date.isoformat() if self.date else None,
+            'bmi': str(self.bmi) if self.bmi else None,  # Include BMI in dict
         }
 
     class Meta:

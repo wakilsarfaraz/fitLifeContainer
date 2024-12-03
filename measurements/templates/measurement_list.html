@@ -515,51 +515,108 @@ FitLife {% endblock %} {% block content %}
         date: document.getElementById("date").value,
       };
 
-      const measurementId = document.getElementById("measurementId").value;
-      const url = measurementId
-        ? `/measurements/${measurementId}/edit/`
-        : "/measurements/add/";
+      // Basic validation
+      let isValid = true;
+      let errorMessages = "";
 
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCookie("csrftoken"),
-        },
-        body: JSON.stringify(formData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            location.reload(); // Refresh page or update UI dynamically
-          } else {
-            // Prepare to display multiple error messages
-            let errorMessages = "";
-            if (data.errors) {
-              for (const [field, errors] of Object.entries(data.errors)) {
-                errorMessages += `${field}: ${errors.join(", ")}<br>`;
-              }
+      if (!formData.weight || !formData.height || !formData.date) {
+        isValid = false;
+        errorMessages += "Weight, height, and date are required.<br>";
+      }
+
+      if (isValid) {
+        const measurementId = document.getElementById("measurementId").value;
+        const url = measurementId
+          ? `/measurements/${measurementId}/edit/`
+          : "/measurements/add/";
+
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+          },
+          body: JSON.stringify(formData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              location.reload(); // Refresh page or update UI dynamically
             } else {
-              // If there's a single error message
-              errorMessages = data.error || "An unknown error occurred.";
-            }
+              // Prepare to display multiple error messages
+              let errorMessages = "";
+              if (data.errors) {
+                for (const [field, errors] of Object.entries(data.errors)) {
+                  errorMessages += `${field}: ${errors.join(", ")}<br>`;
+                }
+              } else {
+                // If there's a single error message
+                errorMessages = data.error || "An unknown error occurred.";
+              }
 
-            document.getElementById("errorMessage").innerHTML = errorMessages;
+              document.getElementById("errorMessage").innerHTML = errorMessages;
+              var errorModal = new bootstrap.Modal(
+                document.getElementById("errorModal")
+              );
+              errorModal.show();
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            document.getElementById("errorMessage").innerHTML =
+              "An error occurred while processing your request. Please try again.";
             var errorModal = new bootstrap.Modal(
               document.getElementById("errorModal")
             );
             errorModal.show();
-          }
-        })
-        .catch((error) => console.error("Error:", error));
+          });
+      } else {
+        // If validation fails, show the error messages
+        document.getElementById("errorMessages").innerHTML = errorMessages;
+        document.getElementById("errorMessages").style.display = "block";
+      }
     });
 
-  // Handle deletion of measurement
+  // Function to get CSRF token for AJAX requests
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  // Function to update the BMI display
+  function updateBmiDisplay() {
+    const weight = parseFloat(document.getElementById("weight").value);
+    const height = parseFloat(document.getElementById("height").value);
+
+    if (weight > 0 && height > 0) {
+      const bmi = (weight / (height / 100) ** 2).toFixed(2); // Calculate BMI
+      document.getElementById(
+        "bmiDisplay"
+      ).textContent = `Calculated BMI: ${bmi}`;
+    } else {
+      document.getElementById("bmiDisplay").textContent = "";
+    }
+  }
+
+  // Add event listeners to update BMI display on weight and height change
+  document.getElementById("weight").addEventListener("input", updateBmiDisplay);
+  document.getElementById("height").addEventListener("input", updateBmiDisplay);
+
+  // Handle delete confirmation
   document
     .getElementById("confirmDeleteButton")
     .addEventListener("click", function () {
       const measurementId = this.getAttribute("data-id");
-
       fetch(`/measurements/${measurementId}/delete/`, {
         method: "POST",
         headers: {
@@ -585,21 +642,5 @@ FitLife {% endblock %} {% block content %}
         })
         .catch((error) => console.error("Error:", error));
     });
-
-  // Function to get CSRF token for AJAX requests
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      const cookies = document.cookie.split(";");
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === name + "=") {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
 </script>
 {% endblock %}

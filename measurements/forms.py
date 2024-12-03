@@ -1,4 +1,3 @@
-# forms.py
 from django import forms
 from .models import Measurement
 from django.core.exceptions import ValidationError
