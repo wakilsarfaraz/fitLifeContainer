@@ -45,8 +45,31 @@
   </div>
 </section>
 
+<!-- About Us Section -->
+<section id="about-us" class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center display-5 mb-4 text-primary">
+      {{ about_us.title }}
+    </h2>
+    <p class="lead text-center mb-5">{{ about_us.description }}</p>
+    <div class="row justify-content-center">
+      {% for feature in about_us.features %}
+      <div class="col-md-4 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title text-primary">
+              <i class="fas fa-check-circle me-2"></i>{{ feature }}
+            </h5>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
 <!-- Membership Plans Section -->
-<section id="membership-plans" class="py-5 bg-light mb-5">
+<section id="membership-plans" class="py-5 bg-light mb-5 mt-4">
   <div class="container">
     <h2 class="text-center display-5 mb-4 text-primary">Membership Plans</h2>
     <div class="row justify-content-center">
@@ -140,72 +163,27 @@
       </div>
 
       <!-- Carousel Controls -->
-      <a
+      <button
         class="carousel-control-prev"
-        href="#nutritionTipsCarousel"
-        role="button"
+        type="button"
+        data-bs-target="#nutritionTipsCarousel"
         data-bs-slide="prev"
       >
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
-      </a>
-      <a
+      </button>
+      <button
         class="carousel-control-next"
-        href="#nutritionTipsCarousel"
-        role="button"
+        type="button"
+        data-bs-target="#nutritionTipsCarousel"
         data-bs-slide="next"
       >
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
-      </a>
+      </button>
     </div>
   </div>
 </section>
-<script>
-  const myCarousel = new bootstrap.Carousel(
-    document.getElementById("nutritionTipsCarousel")
-  );
-  console.log(myCarousel);
-</script>
-
-<!-- Optional: Add custom styles for carousel items -->
-<style>
-  /* Adjust carousel width and responsiveness */
-  #nutritionTipsCarousel .carousel-inner {
-    max-width: 100%;
-    overflow: hidden;
-  }
-
-  #nutritionTipsCarousel .carousel-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  /* Card styling */
-  .carousel-item .card {
-    transition: transform 0.3s ease-in-out;
-  }
-
-  .carousel-item:hover .card {
-    transform: scale(1.05);
-  }
-
-  /* Carousel control icons size */
-  .carousel-control-prev-icon,
-  .carousel-control-next-icon {
-    background-color: #007bff; /* Blue */
-    border-radius: 50%;
-    padding: 10px;
-  }
-
-  /* Ensure carousel arrows are visible on hover */
-  .carousel-control-prev:hover,
-  .carousel-control-next:hover {
-    opacity: 1;
-    transform: scale(1.1);
-  }
-</style>
 
 <!-- Testimonials Section -->
 <section id="testimonials" class="bg-light py-5 mt-5">
