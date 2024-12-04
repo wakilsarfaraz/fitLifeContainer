@@ -1,18 +1,19 @@
 {% extends "base.html" %} {% load static %} {% block title %} Welcome to FitLife
 {% endblock %} {% block content %}
 <!-- Hero Section -->
-<section
-  class="custom-bg-light-blue hero-section text-center py-5 position-relative"
->
-  <div class="overlay"></div>
-  <!-- Gradient Overlay -->
-  <div class="container position-relative z-index-1">
-    <h1 class="display-4 text-white font-weight-bold">Welcome to FitLife</h1>
-    <p class="lead text-light">Your fitness journey starts here</p>
-    <p class="text-muted">Get inspired and stay healthy</p>
-    <a href="{% url 'userauth:login' %}" class="btn btn-light btn-lg mt-3"
-      >Get Started</a
-    >
+<section class="custom-bg-light-blue py-5 mb-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h1 class="display-4 fw-bold mb-4">Welcome to FitLife</h1>
+        <p class="lead mb-4">
+          Your fitness journey starts here <br />Get inspired and stay healthy!
+        </p>
+        <a href="{% url 'userauth:login' %}" class="btn btn-light btn-lg mt-3"
+          >Get Started</a
+        >
+      </div>
+    </div>
   </div>
 </section>
 
@@ -101,18 +102,7 @@
   </div>
 </section>
 
-<style>
-  .card {
-    transition: transform 0.3s ease; /* Smooth transition for the card */
-  }
-
-  .card:hover {
-    transform: scale(1.05); /* Scale up the entire card on hover */
-  }
-</style>
-
-<!-- Nutrition Tips Section -->
-<section id="nutrition-tips" class="py-5 bg-light">
+<section id="nutrition-tips" class="py-5">
   <div class="container">
     <h2 class="text-center display-5 mb-5 text-primary">Nutrition Tips</h2>
     <div
@@ -120,65 +110,102 @@
       class="carousel slide"
       data-bs-ride="carousel"
     >
+      <!-- Carousel Indicators -->
+      <ol class="carousel-indicators">
+        {% for tip in nutrition_tips %}
+        <li
+          data-bs-target="#nutritionTipsCarousel"
+          data-bs-slide-to="{{ forloop.counter0 }}"
+          class="{% if forloop.first %}active{% endif %}"
+          aria-label="Slide {{ forloop.counter }}"
+        ></li>
+        {% endfor %}
+      </ol>
+
+      <!-- Carousel Items -->
       <div class="carousel-inner">
         {% for tip in nutrition_tips %}
         <div class="carousel-item {% if forloop.first %}active{% endif %}">
           <div
-            class="card mx-auto border-0"
-            style="max-width: 900px; padding: 20px"
+            class="card mx-auto border-0 shadow"
+            style="max-width: 900px; padding: 20px; border-radius: 15px"
           >
-            <div class="row g-0 align-items-center">
-              <div class="col-md-6 text-center">
-                <img
-                  src="{% static 'images/'|add:tip.image %}"
-                  class="img-fluid rounded-circle border border-primary mb-3"
-                  alt="{{ tip.title }}"
-                  style="width: 200px; height: 200px; object-fit: cover"
-                />
-              </div>
-              <div class="col-md-6">
-                <div class="card-body">
-                  <h5 class="card-title fw-bold text-primary">
-                    {{ tip.title }}
-                  </h5>
-                  <p class="card-text text-muted">{{ tip.description }}</p>
-                </div>
-              </div>
+            <div class="card-body text-center">
+              <h5 class="card-title fw-bold text-primary">{{ tip.title }}</h5>
+              <p class="card-text text-muted">{{ tip.description }}</p>
             </div>
           </div>
         </div>
         {% endfor %}
       </div>
+
       <!-- Carousel Controls -->
-      <button
+      <a
         class="carousel-control-prev"
-        type="button"
-        data-bs-target="#nutritionTipsCarousel"
+        href="#nutritionTipsCarousel"
+        role="button"
         data-bs-slide="prev"
-        style="background-color: transparent"
       >
-        <span
-          class="carousel-control-prev-icon"
-          style="background-color: black"
-        ></span>
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
-      </button>
-      <button
+      </a>
+      <a
         class="carousel-control-next"
-        type="button"
-        data-bs-target="#nutritionTipsCarousel"
+        href="#nutritionTipsCarousel"
+        role="button"
         data-bs-slide="next"
-        style="background-color: transparent"
       >
-        <span
-          class="carousel-control-next-icon"
-          style="background-color: black"
-        ></span>
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
-      </button>
+      </a>
     </div>
   </div>
 </section>
+<script>
+  const myCarousel = new bootstrap.Carousel(
+    document.getElementById("nutritionTipsCarousel")
+  );
+  console.log(myCarousel);
+</script>
+
+<!-- Optional: Add custom styles for carousel items -->
+<style>
+  /* Adjust carousel width and responsiveness */
+  #nutritionTipsCarousel .carousel-inner {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  #nutritionTipsCarousel .carousel-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Card styling */
+  .carousel-item .card {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .carousel-item:hover .card {
+    transform: scale(1.05);
+  }
+
+  /* Carousel control icons size */
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-color: #007bff; /* Blue */
+    border-radius: 50%;
+    padding: 10px;
+  }
+
+  /* Ensure carousel arrows are visible on hover */
+  .carousel-control-prev:hover,
+  .carousel-control-next:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+</style>
 
 <!-- Testimonials Section -->
 <section id="testimonials" class="bg-light py-5 mt-5">

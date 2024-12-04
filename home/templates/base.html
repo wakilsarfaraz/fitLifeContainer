@@ -18,11 +18,25 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css"
     />
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+
+    <link
+      rel="icon"
+      href="{% static 'images/icon.jpg' %}"
+      type="image/x-icon"
+    />
   </head>
-  <body class="d-flex flex-column" style="height: 100vh; margin: 0">
+  <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm"
+    >
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'home:home' %}">
           <img
@@ -30,7 +44,6 @@
             alt="Logo"
             width="40"
             height="40"
-            class="d-inline-block align-text-top"
           />
         </a>
         <button
@@ -47,31 +60,41 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" href="{% url 'home:home' %}">Home</a>
+              <a
+                class="nav-link {% if request.path == '/' %}active-link{% endif %}"
+                href="{% url 'home:home' %}"
+                >Home</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'classes:classes' %}">Classes</a>
+              <a
+                class="nav-link {% if '/classes/' in request.path %}active-link{% endif %}"
+                href="{% url 'classes:classes' %}"
+                >Classes</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'workouts:workouts' %}"
+              <a
+                class="nav-link {% if '/workouts/' in request.path %}active-link{% endif %}"
+                href="{% url 'workouts:workouts' %}"
                 >Workouts</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'community:community' %}"
+              <a
+                class="nav-link {% if '/community/' in request.path %}active-link{% endif %}"
+                href="{% url 'community:community' %}"
                 >Community</a
               >
             </li>
-            <!-- Measurement Tracker Link -->
             <li class="nav-item">
               <a
-                class="nav-link"
+                class="nav-link {% if '/measurements/' in request.path %}active-link{% endif %}"
                 href="{% url 'measurements:measurement_list' %}"
                 >Measurements</a
               >
             </li>
           </ul>
-          <!-- Authentication-related links -->
           <ul class="navbar-nav">
             {% if user.is_authenticated %}
             <li class="nav-item">
@@ -79,9 +102,7 @@
             </li>
             {% else %}
             <li class="nav-item">
-              <a
-                href="{% url 'userauth:login' %}"
-                class="btn btn-primary ms-auto"
+              <a href="{% url 'userauth:login' %}" class="btn btn-primary"
                 >Login</a
               >
             </li>
@@ -118,9 +139,7 @@
     </div>
 
     <!-- Footer -->
-    <footer
-      class="custom-footer bg-light text-center text-lg-start py-3 mt-auto"
-    >
+    <footer class="bg-light text-center text-lg-start py-3 mt-auto">
       <div class="container">
         <p class="mb-0">&copy; 2024 FitLife. All rights reserved.</p>
       </div>

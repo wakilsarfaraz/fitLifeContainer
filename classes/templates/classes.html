@@ -4,8 +4,8 @@
   <div class="container text-center">
     <h1 class="display-4 fw-bold mb-4">Our Classes</h1>
     <p class="lead mb-4">
-      Explore our wide range of fitness classes and find the one that fits you
-      best.
+      Explore our wide range of weekly fitness classes and find the one that
+      fits you best.
     </p>
     {% if user.is_authenticated %}
     <div class="btn-group mb-3" role="group">
@@ -40,7 +40,7 @@
           <p>Location: {{ class.location }}</p>
           <p>Day: {{ class.day_of_week }}</p>
           <p>Time: {{ class.time }}</p>
-          <p>Remainig Capacity: {{ class.capacity }} / 30</p>
+          <p>Remainig Capacity: {{ class.capacity }}</p>
 
           {% if user.is_authenticated %} {% if class.id in my_classes %}
           <form
