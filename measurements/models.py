@@ -32,8 +32,8 @@ class Measurement(models.Model):
             'unit': self.unit,
             'notes': self.notes,
             'date': self.date.isoformat() if self.date else None,
-            'bmi': str(self.bmi) if self.bmi else None,  # Include BMI in dict
+            'bmi': str(self.bmi) if self.bmi else None,
         }
 
     class Meta:
-        db_table = 'measurements_measurement'
+        db_table = 'measurements'

@@ -1,0 +1,105 @@
+[{
+    "id": 900,
+     "title": "Full Body Warm Up",
+     "description": "A full-body warm-up to get your muscles activated and ready for exercise.",
+     "youtube_url": "https://youtu.be/K46NXYoYNK8?si=RC5xYCyLJ-omtZoz",
+     "category": "Warm Up"
+   },
+   {
+     "id": 901,
+     "title": "Dynamic Stretching Routine",
+     "description": "A dynamic stretching routine to increase flexibility and improve range of motion.",
+     "youtube_url": "https://youtu.be/R0mMyV5OtcM?si=2GE59BtMmj0-G5wy",
+     "category": "Warm Up"
+   },
+   {
+     "id": 902,
+     "title": "Cardio Warm Up",
+     "description": "A light cardio warm-up to get your heart rate up and improve circulation.",
+     "youtube_url": "https://youtu.be/LKSC_KujZ4g?si=Ya7sP3oCEFsJht-F",
+     "category": "Warm Up"
+   },
+   {
+     "id": 903,
+     "title": "Joint Mobility Warm Up",
+     "description": "A joint mobility warm-up to enhance movement and reduce injury risks.",
+     "youtube_url": "https://youtu.be/nfGWaRoKr7k?si=ZJu6ymEnA8KjMj2F",
+     "category": "Warm Up"
+   },
+   {
+     "id": 904,
+     "title": "Test Full Body Warm Up",
+     "description": "A full-body warm-up to get your muscles activated and ready for exercise.",
+     "youtube_url": "https://youtu.be/K46NXYoYNK8?si=RC5xYCyLJ-omtZoz",
+     "category": "Warm Up"
+   },
+   {
+     "id": 905,
+     "title": "Cardio Workout 1",
+     "description": "A high-energy cardio workout to get your heart pumping and improve cardiovascular fitness.",
+     "youtube_url": "https://youtu.be/fcN37TxBE_s?si=1wbZTAOJ5QxDnOA9",
+     "category": "cardio"
+   },
+   {
+     "id": 906,
+     "title": "Cardio Workout 2",
+     "description": "A fast-paced cardio workout focused on endurance and stamina.",
+     "youtube_url": "https://youtu.be/dj03_VDetdw?si=-9SdCe5dRJCjSP93",
+     "category": "cardio"
+   },
+   {
+     "id": 907,
+     "title": "Cardio Workout 3",
+     "description": "This cardio routine will help you improve your agility and burn calories efficiently.",
+     "youtube_url": "https://youtu.be/melA7IB117I?si=WedZyvOnuWBeotl_",
+     "category": "cardio"
+   },
+   {
+     "id": 908,
+     "title": "Cardio Workout 4",
+     "description": "A full-body cardio workout that targets all major muscle groups while improving your heart health.",
+     "youtube_url": "https://youtu.be/QhKMQlvzy00?si=AqfLnGQG67kGDf2u",
+     "category": "cardio"
+   },
+   {
+     "id": 909,
+     "title": "HIIT Workout 1",
+     "description": "An intense HIIT workout to improve strength and endurance through high-intensity intervals.",
+     "youtube_url": "https://youtu.be/J212vz33gU4?si=54Pj2FchFJYIRW8f",
+     "category": "HIIT"
+   },
+   {
+     "id": 910,
+     "title": "HIIT Workout 2",
+     "description": "This HIIT workout focuses on quick movements to push your limits and burn fat.",
+     "youtube_url": "https://youtu.be/Zh_90T6NUGE?si=DtHc3RYWR3p1Apv1",
+     "category": "HIIT"
+   },
+   {
+     "id": 911,
+     "title": "HIIT Workout 3",
+     "description": "High-intensity exercises designed to increase metabolism and enhance cardiovascular health.",
+     "youtube_url": "https://youtu.be/cZnsLVArIt8?si=EXVR3wiROrOgSja3",
+     "category": "HIIT"
+   },
+   {
+     "id": 912,
+     "title": "Cool Down Workout 1",
+     "description": "A relaxing cool-down session to stretch and calm your muscles after a workout.",
+     "youtube_url": "https://youtu.be/Qy3U09CnELI?si=l2i8A0_MU0A5wWgG",
+     "category": "Cool Down"
+   },
+   {
+     "id": 913,
+     "title": "Cool Down Workout 2",
+     "description": "A gentle cool-down routine that focuses on deep breathing and light stretching.",
+     "youtube_url": "https://youtu.be/u5Hr3rNUZ24?si=RAejsk6NTajrcMlO",
+     "category": "Cool Down"
+   },
+   {
+     "id": 914,
+     "title": "Cool Down Workout 3",
+     "description": "A calm cool-down session designed to reduce muscle tension and improve flexibility.",
+     "youtube_url": "https://youtu.be/9wmWEaydbzk?si=0ooF2Qj21km77K4u",
+     "category": "Cool Down"
+   }]

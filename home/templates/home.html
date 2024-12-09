@@ -1,17 +1,32 @@
-{% extends "base.html" %} {% load static %} {% block title %} Welcome to FitLife
-{% endblock %} {% block content %}
+{% extends "base.html" %}  <!-- Inherit from the base template for consistent layout -->
+{% load static %}  <!-- Load static files (like images, CSS, JS) -->
+
+{% block title %} 
+  Welcome to FitLife <!-- Set the title of the page -->
+{% endblock %} 
+
+{% block content %}
+
+
 <!-- Hero Section -->
 <section class="custom-bg-light-blue py-5 mb-5">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-8 text-center">
-        <h1 class="display-4 fw-bold mb-4">Welcome to FitLife</h1>
+        {% if user.is_authenticated %}
+        <h1 class="display-4 fw-bold mb-4" id="dynamic-greeting">
+          {{ greeting }}, {{ user.username }} 
+           Welcome to FitLife!
+        </h1>
+        {% else %}
+        <h1 class="display-4 fw-bold mb-4">
+          Welcome to FitLife
+        </h1>
         <p class="lead mb-4">
-          Your fitness journey starts here <br />Get inspired and stay healthy!
+          Your fitness journey starts here. <br /> Get inspired and stay healthy!
         </p>
-        <a href="{% url 'userauth:login' %}" class="btn btn-light btn-lg mt-3"
-          >Get Started</a
-        >
+        <a href="{% url 'userauth:login' %}" class="btn btn-primary btn-lg mt-3">Get Started</a>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -23,20 +38,20 @@
     <div class="row justify-content-center">
       {% for item in sections %}
       <div class="col-md-4 mb-4">
-        <div class="card shadow-sm border-0 h-100">
+        <div class="card card-transition shadow-sm border-0 h-100">
           <img
-            src="{% static 'images/'|add:item.image %}"
+            src="{% static 'home/images/'|add:item.image %}"
             class="card-img-top rounded-top"
             alt="{{ item.title }}"
           />
           <div class="card-body">
-            <h5 class="card-title text-primary">{{ item.title }}</h5>
+            <h5 class="card-title blue-text">{{ item.title }}</h5>
             <p class="card-text text-muted">{{ item.description }}</p>
           </div>
           <div class="card-footer bg-white">
-            <a href="{% url item.url %}" class="btn btn-primary btn-sm"
-              >Learn More</a
-            >
+            <a href="{% url item.url %}" class="btn btn-primary btn-sm">
+              Learn More
+            </a>
           </div>
         </div>
       </div>
@@ -46,19 +61,20 @@
 </section>
 
 <!-- About Us Section -->
-<section id="about-us" class="py-5 bg-light">
+<section  class="py-5">
   <div class="container">
-    <h2 class="text-center display-5 mb-4 text-primary">
-      {{ about_us.title }}
+    <h2 class="home-section-title text-center display-5 mb-4">
+      {{ about_us.title }} <!-- Display the "About Us" section title -->
     </h2>
-    <p class="lead text-center mb-5">{{ about_us.description }}</p>
-    <div class="row justify-content-center">
+    <div></div>
+    <p class="mt-3 lead text-center mb-5">{{ about_us.description }}</p>
+    <div class="mt-2 row justify-content-center">
       {% for feature in about_us.features %}
       <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow-sm h-100">
+        <div class="card card-transition border-0 shadow-sm h-100">
           <div class="card-body">
-            <h5 class="card-title text-primary">
-              <i class="fas fa-check-circle me-2"></i>{{ feature }}
+            <h5 class="card-title blue-text">
+              <i class="fas fa-check-circle me-2"></i>{{ feature }} <!-- List of features under About Us -->
             </h5>
           </div>
         </div>
@@ -69,15 +85,30 @@
 </section>
 
 <!-- Membership Plans Section -->
-<section id="membership-plans" class="py-5 bg-light mb-5 mt-4">
+<section id="membership-plans" class=" mt-4">
   <div class="container">
-    <h2 class="text-center display-5 mb-4 text-primary">Membership Plans</h2>
+    <h2 class="home-section-title text-center display-5 mb-4">Membership Plans</h2>
+    <p class="text-center lead mb-4">
+      Call us now at 
+      <a href="tel:+97317171717" class="blue-text fw-bold" style="text-decoration: none;">
+        +973 17171717
+      </a>
+      to join and choose the plan that fits your needs!
+    </p>
+    <div class="text-center mb-4">
+      <div class="btn-group" role="group" aria-label="Billing toggle">
+        <button id="monthly-btn" type="button" class="btn btn-outline-primary active billing-toggle" onclick="toggleBilling('monthly')">Monthly</button>
+        <button id="yearly-btn" type="button" class="btn btn-outline-primary billing-toggle" onclick="toggleBilling('yearly')">Yearly</button>
+      </div>
+    </div>
+
     <div class="row justify-content-center">
-      <div class="col-md-4 mb-4">
-        <div class="card shadow border-0 h-100 rounded">
+      <!-- Basic Plan -->
+      <div class="col-md-3 mb-4">
+        <div class="card card-transition shadow-sm border-0 h-100">
           <div class="card-body text-center">
-            <h5 class="card-title text-primary font-weight-bold">Basic Plan</h5>
-            <p class="card-text text-muted fs-5">25BD/month</p>
+            <h5 class="card-title blue-text fw-bold">Basic Plan</h5>
+            <p class="card-text fs-5 text-muted" id="basic-plan-price">25 BD/month</p>
             <ul class="list-unstyled text-muted">
               <li>Access to gym equipment</li>
               <li>Locker facility</li>
@@ -86,13 +117,13 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4 mb-4">
-        <div class="card shadow border-0 h-100 rounded">
+
+      <!-- Premium Plan -->
+      <div class="col-md-3 mb-4">
+        <div class="card card-transition shadow-sm border-0 h-100">
           <div class="card-body text-center">
-            <h5 class="card-title text-primary font-weight-bold">
-              Premium Plan
-            </h5>
-            <p class="card-text text-muted fs-5">35BD/month</p>
+            <h5 class="card-title blue-text fw-bold">Premium Plan</h5>
+            <p class="card-text fs-5 text-muted" id="premium-plan-price">35 BD/month</p>
             <ul class="list-unstyled text-muted">
               <li>All Basic Plan features</li>
               <li>Unlimited group classes</li>
@@ -101,11 +132,13 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4 mb-4">
-        <div class="card shadow border-0 h-100 rounded">
+
+      <!-- Elite Plan -->
+      <div class="col-md-3 mb-4">
+        <div class="card card-transition shadow-sm border-0 h-100">
           <div class="card-body text-center">
-            <h5 class="card-title text-primary font-weight-bold">Elite Plan</h5>
-            <p class="card-text text-muted fs-5">50BD/month</p>
+            <h5 class="card-title blue-text fw-bold">Elite Plan</h5>
+            <p class="card-text fs-5 text-muted" id="elite-plan-price">50 BD/month</p>
             <ul class="list-unstyled text-muted">
               <li>All Premium Plan features</li>
               <li>Personal trainer sessions</li>
@@ -115,95 +148,53 @@
         </div>
       </div>
     </div>
-    <div class="text-center mt-4">
-      <p class="lead text-muted">
-        Call us at
-        <a href="tel:+97317171717" class="text-primary">+973 17171717</a> to
-        join today!
-      </p>
-    </div>
   </div>
 </section>
 
-<section id="nutrition-tips" class="py-5">
+
+
+
+<!-- Nutrition Tips Section -->
+<section id="nutrition-tips" class="py-5 mt-3">
   <div class="container">
-    <h2 class="text-center display-5 mb-5 text-primary">Nutrition Tips</h2>
-    <div
-      id="nutritionTipsCarousel"
-      class="carousel slide"
-      data-bs-ride="carousel"
-    >
+    <h2 class="home-section-title text-center display-5 mb-4">Nutrition Tips</h2>
+    <div id="nutritionTipsCarousel" class="carousel slide" data-bs-ride="carousel">
       <!-- Carousel Indicators -->
       <ol class="carousel-indicators">
         {% for tip in nutrition_tips %}
-        <li
-          data-bs-target="#nutritionTipsCarousel"
-          data-bs-slide-to="{{ forloop.counter0 }}"
-          class="{% if forloop.first %}active{% endif %}"
-          aria-label="Slide {{ forloop.counter }}"
-        ></li>
+        <li data-bs-target="#nutritionTipsCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-label="Slide {{ forloop.counter }}"></li>
         {% endfor %}
       </ol>
 
       <!-- Carousel Items -->
-      <div class="carousel-inner">
+      <div class="mt-5 carousel-inner">
         {% for tip in nutrition_tips %}
         <div class="carousel-item {% if forloop.first %}active{% endif %}">
-          <div
-            class="card mx-auto border-0 shadow"
-            style="max-width: 900px; padding: 20px; border-radius: 15px"
-          >
+          <div class=" card mx-auto border-1" style="max-width: 900px; padding: 30px; border-radius: 15px">
             <div class="card-body text-center">
-              <h5 class="card-title fw-bold text-primary">{{ tip.title }}</h5>
+              <h5 class="card-title fw-bold blue-text">{{ tip.title }}</h5>
               <p class="card-text text-muted">{{ tip.description }}</p>
             </div>
           </div>
         </div>
         {% endfor %}
       </div>
-
-      <!-- Carousel Controls -->
-      <button
-        class="carousel-control-prev"
-        type="button"
-        data-bs-target="#nutritionTipsCarousel"
-        data-bs-slide="prev"
-      >
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button
-        class="carousel-control-next"
-        type="button"
-        data-bs-target="#nutritionTipsCarousel"
-        data-bs-slide="next"
-      >
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
     </div>
   </div>
 </section>
 
 <!-- Testimonials Section -->
-<section id="testimonials" class="bg-light py-5 mt-5">
+<section id="testimonials" class="py-5 mt-3">
   <div class="container">
-    <h2 class="text-center display-5 mb-4">What Our Members Say</h2>
+    <h2 class="home-section-title text-center display-5 mb-4">What Our Members Say</h2>
     <div class="row d-flex align-items-stretch">
       {% for testimonial in testimonials %}
-      <div class="col-md-4 mb-4">
-        <div class="card border-light shadow-sm h-100">
-          <img
-            src="{% static 'images/'|add:testimonial.image %}"
-            class="card-img-top rounded-circle mx-auto mt-4"
-            alt="{{ testimonial.name }}"
-            style="width: 100px; height: 100px; object-fit: cover"
-          />
+      <div class="mt-5 col-md-4 mb-4">
+        <div class="card card-transition border-light shadow-sm h-100">
+          <img src="{% static 'home/images/'|add:testimonial.image %}" class="card-img-top rounded-circle mx-auto mt-4" alt="{{ testimonial.name }}" style="width: 100px; height: 100px; object-fit: cover" />
           <div class="card-body">
             <p class="card-text font-italic">"{{ testimonial.text }}"</p>
-            <footer class="blockquote-footer text-muted">
-              {{ testimonial.name }}
-            </footer>
+            <footer class="blockquote-footer text-muted">{{ testimonial.name }}</footer>
           </div>
         </div>
       </div>
@@ -213,23 +204,13 @@
 </section>
 
 <!-- Call to Action Section -->
-<section
-  style="
-    background-image: url('../static/images/gym.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-  "
-  class="custom-bg-light-blue text-black py-5 mt-5"
->
+<section class="custom-bg-light-blue text-black py-5 mt-4">
   <div class="container text-center">
-    <h2 class="mb-4">Ready to Start Your Fitness Journey?</h2>
+    <h2 class="text-center display-5 mb-4">Ready to Start Your Fitness Journey?</h2>
     <p class="lead mb-4 text-muted">
       Join FitLife today and experience the difference!
     </p>
-    <a href="{% url 'userauth:login' %}" class="btn btn-light btn-lg"
-      >Sign Up Now</a
-    >
+    <a href="{% url 'userauth:login' %}" class="btn btn-primary btn-lg">Sign Up Now</a>
   </div>
 </section>
 
@@ -241,26 +222,63 @@
       {% for link in quick_links %}
       <div class="col-auto mb-2">
         {% if link.title == "Nutrition Tips" %}
-        <a href="#nutrition-tips" class="btn btn-outline-primary btn-lg"
-          >{{ link.title }}</a
-        >
+        <a href="#nutrition-tips" class="btn btn-outline-primary btn-lg">{{ link.title }}</a>
         {% elif link.title == "Success Stories" %}
-        <a href="#testimonials" class="btn btn-outline-primary btn-lg"
-          >Testimonials</a
-        >
+        <a href="#testimonials" class="btn btn-outline-primary btn-lg">Testimonials</a>
         {% elif link.title == "Membership Plans" %}
-        <a href="#membership-plans" class="btn btn-outline-primary btn-lg"
-          >{{ link.title }}</a
-        >
+        <a href="#membership-plans" class="btn btn-outline-primary btn-lg">{{ link.title }}</a>
         {% else %}
-        <a href="{% url link.url %}" class="btn btn-outline-primary btn-lg"
-          >{{ link.title }}</a
-        >
+        <a href="{% url link.url %}" class="btn btn-outline-primary btn-lg">{{ link.title }}</a>
         {% endif %}
       </div>
       {% endfor %}
     </div>
   </div>
 </section>
+
+<!-- JavaScript to Toggle Billing and Active State -->
+<script>
+  function toggleBilling(option) {
+    // Update the plan prices
+    if (option === 'monthly') {
+      document.getElementById('basic-plan-price').textContent = '25 BD/month';
+      document.getElementById('premium-plan-price').textContent = '35 BD/month';
+      document.getElementById('elite-plan-price').textContent = '50 BD/month';
+    } else if (option === 'yearly') {
+      document.getElementById('basic-plan-price').textContent = '190 BD/year';
+      document.getElementById('premium-plan-price').textContent = '250 BD/year';
+      document.getElementById('elite-plan-price').textContent = '380 BD/year';
+    }
+
+    // Update active button styling
+    document.getElementById('monthly-btn').classList.remove('active');
+    document.getElementById('yearly-btn').classList.remove('active');
+    document.getElementById(option + '-btn').classList.add('active');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const currentHour = new Date().getHours();
+    const greetingElement = document.getElementById('dynamic-greeting');
+    let greeting;
+
+    if (currentHour < 12) {
+      greeting = 'Good Morning';
+    } else if (currentHour < 18) {
+      greeting = 'Good Afternoon';
+    } else {
+      greeting = 'Good Evening';
+    }
+
+    // Update the greeting dynamically
+    if (greetingElement) {
+      if (greetingElement.textContent.includes('{{ user.username }}')) {
+        greetingElement.textContent = `${greeting}, {{ user.username }}! Welcome to FitLife`;
+      } else {
+        greetingElement.textContent = greeting + " Welcome to FitLife";
+      }
+    }
+  });
+</script>
+
 
 {% endblock %}

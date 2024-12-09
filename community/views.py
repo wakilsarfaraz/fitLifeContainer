@@ -1,12 +1,15 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, CreateView, DetailView, View
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Count
-from .models import Post, Like, Comment, CommentLike
-from .forms import PostForm, CommentForm
+
+from .forms import PostForm
+
+from django.db.models import Count
+from .models import Post, Like, Comment , CommentLike 
 
 
 class PostView(ListView):
@@ -44,23 +47,22 @@ class PostView(ListView):
         context['current_category'] = self.request.GET.get('category', '')
         context['current_sort'] = self.request.GET.get('sort_by', '')
         context['my_posts'] = self.request.GET.get('my_posts') == 'true'
-        return context
+        return context 
 
+class PostDetailView(View):
+    def get(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, id=kwargs['pk'])
+        comments = post.comments.filter(parent=None)
 
-class PostDetailView(DetailView):
-    model = Post
-    template_name = 'post_detail.html'
-    context_object_name = 'post'
+        for comment in comments:
+            comment.likes_count = comment.likes.count()  # Count likes using the related_name 'likes'
+        
+        return render(request, 'post_detail.html', {
+            'post': post,
+            'comments': comments,
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        comments = self.object.comments.filter(parent=None).annotate(
-            reply_count=Count('replies'),
-            like_count=Count('likes')
-        )
-        context['comments'] = comments
-        return context
-
+        })
+ 
 
 class AddPostView(CreateView):
     model = Post
@@ -123,36 +125,18 @@ def add_comment(request, post_id):
     return redirect('community:post_detail', pk=post_id)
 
 
-@login_required
-def edit_comment(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id)
-    if request.user != comment.user:
-        return redirect('community:post_detail', pk=comment.post.id)
-
-    if request.method == 'POST':
-        content = request.POST.get('content').strip()
-        if not content:
-            messages.error(request, "Comment content cannot be empty.")
-            return redirect('community:post_detail', pk=comment.post.id)
-
-        comment.content = content
-        comment.save()
-        messages.success(request, "Your comment has been updated.")
-        return redirect('community:post_detail', pk=comment.post.id)
-
-    return render(request, 'edit_comment.html', {'comment': comment})
 
 
 @login_required
 def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     if request.user != comment.user:
+        messages.error(request, "You are not authorized to delete this comment.")
         return redirect('community:post_detail', pk=comment.post.id)
 
     comment.delete()
     messages.success(request, "Your comment has been deleted.")
     return redirect('community:post_detail', pk=comment.post.id)
-
 
 @login_required
 def like_comment(request, comment_id):

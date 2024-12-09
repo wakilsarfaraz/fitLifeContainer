@@ -16,3 +16,6 @@ class Workout(models.Model):
         elif 'youtu.be/' in self.youtube_url:
             return self.youtube_url.split('youtu.be/')[-1].split('?')[0]
         return None
+    
+    class Meta:
+        db_table = "workouts"

@@ -20,10 +20,3 @@ class CommentForm(forms.ModelForm):
             'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Enter your comment here'}),
         }
 
-class EditCommentForm(forms.ModelForm):
-    class Meta:
-        model = Comment
-        fields = ['content']
-        widgets = {
-            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Edit your comment here'}),
-        }

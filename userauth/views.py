@@ -20,4 +20,16 @@ class CustomLogoutView(LogoutView):
 
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
+    
+    # This method is called when the login form is valid
+    def form_valid(self, form):
+        user = form.get_user()  # Get the logged-in user
+
+        if user.is_staff:  # Check if the user is an admin
+            return redirect('/admin/')  # Redirect admins to the admin page
+
+        # If the user is not an admin, redirect to the success_url
+        return super().form_valid(form)  # Redirect to the default success_url
+
+    # Set the success_url for non-admin users (the default success page)
     success_url = reverse_lazy('home')

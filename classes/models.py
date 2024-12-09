@@ -27,11 +27,14 @@ class FitnessClass(models.Model):
     ])
     time = models.TimeField(null=True, blank=True)
     image = models.ImageField(upload_to=fitness_class_image_upload_to)
-    location = models.CharField(max_length=100)  # New field for class location
-    capacity = models.PositiveIntegerField(default=30)  # New field for class capacity
+    location = models.CharField(max_length=100) 
+    capacity = models.PositiveIntegerField(default=30) 
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        db_table = "fitness_classes"
 
 class UserClass(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -39,6 +42,7 @@ class UserClass(models.Model):
     date = models.DateField()
 
     class Meta:
+        db_table = "user_classes"
         constraints = [
             models.UniqueConstraint(fields=['user', 'fitness_class', 'date'], name='unique_user_class_date')
         ]

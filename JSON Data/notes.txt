@@ -1,2 +1,4 @@
-These files can be imported to FitLife Database using import
-Should show how in mongo db compass and shell }
+These files can be imported to FitLife Database
+ using import csv or json in mongodb compass to 
+ poulate some data to the database for easier 
+ testing of the website functionalities 

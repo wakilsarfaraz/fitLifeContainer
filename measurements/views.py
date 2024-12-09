@@ -14,12 +14,24 @@ def calculate_bmi(weight, height):
         return round(weight / ((height / 100) ** 2), 2)  # BMI = weight(kg) / height(m)^2
     return None
 
-@login_required
+from django.shortcuts import render, redirect
+from django.utils import timezone
+
 def measurement_list(request):
+    if not request.user.is_authenticated:
+        return render(request, 'measurement_list.html', {
+            'measurements': None,  # No measurements to show
+            'not_authenticated': True  # Flag to indicate user is not authenticated
+        })
+
     measurements = request.user.measurements.all()
     current_date = timezone.now().date()
     formatted_date = current_date.isoformat()
-    return render(request, 'measurement_list.html', {'measurements': measurements, 'current_date': formatted_date})
+    return render(request, 'measurement_list.html', {
+        'measurements': measurements,
+        'current_date': formatted_date,
+        'not_authenticated': False  # User is authenticated
+    })
 
 @csrf_protect
 @login_required

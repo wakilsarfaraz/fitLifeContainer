@@ -1,14 +1,15 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %} 
+{% load static %} 
+{% block content %}
 
 <section class="custom-bg-light-blue py-5 mb-5 classes-container">
   <div class="container text-center">
     <h1 class="display-4 fw-bold mb-4">Our Classes</h1>
     <p class="lead mb-4">
-      Explore our wide range of weekly fitness classes and find the one that
-      fits you best.
+      Explore our wide range of weekly fitness classes and find the one that fits you best.
     </p>
     {% if user.is_authenticated %}
-    <div class="btn-group mb-3" role="group">
+    <div class="classes-btn-group btn-group mb-3" role="group">
       <a
         href="{% url 'classes:classes' %}"
         class="btn {% if request.resolver_match.url_name == 'classes' %}btn-primary{% else %}btn-outline-primary{% endif %}"
@@ -80,6 +81,24 @@
   </div>
 </div>
 
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="messageModalLabel">Class Update</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalMessage">
+        <!-- Dynamic message will appear here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   // Handle button click responses
   document.querySelectorAll("form").forEach((form) => {
@@ -95,7 +114,13 @@
       })
         .then((response) => response.json())
         .then((data) => {
-          alert(data.message); // Show success or error message
+          const modalMessage = document.getElementById('modalMessage');
+          modalMessage.textContent = data.message; // Set the message in the modal
+
+          // Show the modal
+          const modal = new bootstrap.Modal(document.getElementById('messageModal'));
+          modal.show();
+
           if (data.status === "success") {
             location.reload(); // Reload the page to update the class list
           }
@@ -104,23 +129,6 @@
   });
 </script>
 
-<style>
-  .class-card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease;
-  }
-  .class-card:hover {
-    transform: scale(1.05);
-  }
-  .card-img-top {
-    height: 200px;
-    object-fit: cover;
-  }
-  .card-body {
-    flex-grow: 1;
-  }
-</style>
+
 
 {% endblock %}
