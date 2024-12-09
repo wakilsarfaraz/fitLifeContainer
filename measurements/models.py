@@ -34,6 +34,3 @@ class Measurement(models.Model):
             'date': self.date.isoformat() if self.date else None,
             'bmi': str(self.bmi) if self.bmi else None,
         }
-
-    class Meta:
-        db_table = 'measurements'

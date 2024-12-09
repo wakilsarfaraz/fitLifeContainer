@@ -17,5 +17,4 @@ class Workout(models.Model):
             return self.youtube_url.split('youtu.be/')[-1].split('?')[0]
         return None
     
-    class Meta:
-        db_table = "workouts"
+

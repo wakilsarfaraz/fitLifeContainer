@@ -41,8 +41,6 @@ class Post(models.Model):
         """Returns the users who liked this post"""
         return self.likes.all()
     
-    class Meta:
-        db_table = "posts"
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -50,7 +48,6 @@ class Like(models.Model):
     date_liked = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = "likes"
         unique_together = ('user', 'post')  # Prevent a user from liking the same post multiple times
 
     def __str__(self):
@@ -67,15 +64,12 @@ class Comment(models.Model):
     def __str__(self):
         return f'{self.user.username} - {self.content[:50]}'
     
-    class Meta:
-        db_table = "comments"
     
 
 class CommentLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='likes')
     class Meta:
-        db_table = "comment_likes"
         unique_together = ('user', 'comment')
 
     def __str__(self):
