@@ -5,7 +5,6 @@
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-lg-12 d-flex align-items-start">
-      <!-- Image on the left side -->
       <div class="col-lg-6 d-flex align-items-center mb-4 mb-lg-0">
         <img
           src="{% static 'community/images/community-post.jpeg' %}"
@@ -14,7 +13,6 @@
         />
       </div>
 
-      <!-- Form on the right side -->
       <div class="col-lg-6 d-flex align-items-center">
         <div class="card shadow-lg border-0 rounded-3 w-100 post-form">
           <div class="card-header custom-bg-light-blue text-white text-center py-4">
@@ -38,6 +36,9 @@
                   id="{{ form.title.id_for_label }}" 
                   class="form-control form-control-sm" 
                   placeholder="Enter the title of your post" /> 
+                {% if form.title.errors %}
+                  <div class="text-danger">{{ form.title.errors }}</div>
+                {% endif %}
               </div>
 
               <!-- Content (Description) Field -->
@@ -54,6 +55,9 @@
                   id="{{ form.content.id_for_label }}" 
                   rows="3" 
                   placeholder="Enter your post content here..."></textarea> 
+                {% if form.content.errors %}
+                  <div class="text-danger">{{ form.content.errors }}</div>
+                {% endif %}
               </div>
 
               <!-- Category Field -->
@@ -65,6 +69,9 @@
                   {{ form.category.label }}
                 </label>
                 {{ form.category|add_class:"form-select form-select-sm" }}
+                {% if form.category.errors %}
+                  <div class="text-danger">{{ form.category.errors }}</div>
+                {% endif %}
               </div>
 
               <!-- Image Field -->
@@ -90,7 +97,6 @@
     </div>
   </div>
 
-  <!-- Adding space between form and footer -->
   <div class="mt-5"></div>
 </div>
 {% endblock %}

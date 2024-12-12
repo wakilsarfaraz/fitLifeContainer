@@ -20,7 +20,7 @@
 
 <div class="container mt-5">
   {% if not_authenticated %}
-    <div class="alert custom-alert alert-warning" role="alert">
+    <div class="alert custom-alert" role="alert">
       Please log in to start tracking your measurements.
     </div>
   {% else %}
@@ -561,6 +561,7 @@
         document.getElementById(`measurement-${measurementId}`).remove(); // Remove measurement row
         var deleteModal = bootstrap.Modal.getInstance(document.getElementById("deleteMeasurementModal"));
         deleteModal.hide(); // Hide the delete confirmation modal
+        location.reload();
       } else {
         document.getElementById("errorMessage").innerHTML = data.error;
         var errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
