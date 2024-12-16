@@ -38,6 +38,7 @@ def my_classes(request):
     # Prepare classes and their IDs for rendering
     my_classes = [c.id for c in valid_classes]
 
+
     # Render the template with valid classes only
     return render(request, 'classes.html', {'classes': valid_classes, 'my_classes': my_classes})
 

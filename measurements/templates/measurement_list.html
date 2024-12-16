@@ -383,7 +383,7 @@
 
     // Format the date to YYYY-MM-DD
     const date = new Date(measurementRow.children[12].textContent);
-    const formattedDate = date.toISOString().split("T")[0]; // Get YYYY-MM-DD format
+    const formattedDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().split("T")[0];
     document.getElementById("date").value = formattedDate;
 
     // Show the modal for editing
