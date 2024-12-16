@@ -59,13 +59,23 @@ class MeasurementForm(forms.ModelForm):
             except InvalidOperation:
                 raise ValidationError(f"{field_name} must be a valid number.")
             
+            # Check for the range
             if value < 0 or value > 999.99:
                 raise ValidationError(f"{field_name} must be between 0 and 999.99.")
             
+            # Convert to string to count digits
+            value_str = f"{value:.2f}"  # Format to 2 decimal places
+            whole_part, decimal_part = value_str.split('.')
+
+            # Check digit limits
+            if len(whole_part) > 3:
+                raise ValidationError(f"{field_name} cannot have more than 3 digits before the decimal point.")
+            if len(decimal_part) > 2:
+                raise ValidationError(f"{field_name} cannot have more than 2 digits after the decimal point.")
+            
             # Round to 2 decimal places
             value = round(value, 2)
-
-        return value
+            return value
 
     def clean_unit(self):
         unit = self.cleaned_data.get('unit')
