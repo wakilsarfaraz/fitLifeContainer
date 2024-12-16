@@ -5,6 +5,6 @@ class RedirectUnauthenticatedMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path.startswith('/classes/') and not request.user.is_authenticated:
+        if request.path.startswith('/classes/my-classes') and not request.user.is_authenticated:
             return redirect('/')  # Redirect to home if unauthenticated
         return self.get_response(request)
