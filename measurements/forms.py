@@ -17,84 +17,55 @@ class MeasurementForm(forms.ModelForm):
 
     def clean_weight(self):
         weight = self.cleaned_data.get('weight')
-        if weight is not None and (weight < 0 or weight > 999.99):
-            raise ValidationError("Weight must be between 0 and 999.99.")
-        if weight is not None:
-            # Round to 2 decimal places
-            weight = round(Decimal(weight), 2)
-        return weight
+        return self.validate_measurement(weight, "Weight")
 
     def clean_height(self):
         height = self.cleaned_data.get('height')
-        if height is not None and (height < 0 or height > 999.99):
-            raise ValidationError("Height must be between 0 and 999.99.")
-        if height is not None:
-            # Round to 2 decimal places
-            height = round(Decimal(height), 2)
-        return height
+        return self.validate_measurement(height, "Height")
 
     def clean_chest(self):
         chest = self.cleaned_data.get('chest')
-        if chest is not None and (chest < 0 or chest > 999.99):
-            raise ValidationError("Chest measurement must be between 0 and 999.99.")
-        if chest is not None:
-            # Round to 2 decimal places
-            chest = round(Decimal(chest), 2)
-        return chest
+        return self.validate_measurement(chest, "Chest measurement")
 
     def clean_waist(self):
         waist = self.cleaned_data.get('waist')
-        if waist is not None and (waist < 0 or waist > 999.99):
-            raise ValidationError("Waist measurement must be between 0 and 999.99.")
-        if waist is not None:
-            # Round to 2 decimal places
-            waist = round(Decimal(waist), 2)
-        return waist
+        return self.validate_measurement(waist, "Waist measurement")
 
     def clean_hips(self):
         hips = self.cleaned_data.get('hips')
-        if hips is not None and (hips < 0 or hips > 999.99):
-            raise ValidationError("Hips measurement must be between 0 and 999.99.")
-        if hips is not None:
-            # Round to 2 decimal places
-            hips = round(Decimal(hips), 2)
-        return hips
+        return self.validate_measurement(hips, "Hips measurement")
 
     def clean_thighs(self):
         thighs = self.cleaned_data.get('thighs')
-        if thighs is not None and (thighs < 0 or thighs > 999.99):
-            raise ValidationError("Thighs measurement must be between 0 and 999.99.")
-        if thighs is not None:
-            # Round to 2 decimal places
-            thighs = round(Decimal(thighs), 2)
-        return thighs
+        return self.validate_measurement(thighs, "Thighs measurement")
 
     def clean_calves(self):
         calves = self.cleaned_data.get('calves')
-        if calves is not None and (calves < 0 or calves > 999.99):
-            raise ValidationError("Calves measurement must be between 0 and 999.99.")
-        if calves is not None:
-            # Round to 2 decimal places
-            calves = round(Decimal(calves), 2)
-        return calves
+        return self.validate_measurement(calves, "Calves measurement")
 
     def clean_left_arm(self):
         left_arm = self.cleaned_data.get('left_arm')
-        if left_arm is not None and (left_arm < 0 or left_arm > 999.99):
-            raise ValidationError("Left arm measurement must be between 0 and 999.99.")
-        if left_arm is not None:
-            # Round to 2 decimal places
-            left_arm = round(Decimal(left_arm), 2)
-        return left_arm
+        return self.validate_measurement(left_arm, "Left arm measurement")
 
     def clean_right_arm(self):
         right_arm = self.cleaned_data.get('right_arm')
-        if right_arm is not None and (right_arm < 0 or right_arm > 999.99):
-            raise ValidationError("Right arm measurement must be between 0 and 999.99.")
-        if right_arm is not None:
+        return self.validate_measurement(right_arm, "Right arm measurement")
+
+    def validate_measurement(self, value, field_name):
+        if value is not None:
+            try:
+                # Convert to Decimal safely
+                value = Decimal(str(value))
+            except InvalidOperation:
+                raise ValidationError(f"{field_name} must be a valid number.")
+            
+            if value < 0 or value > 999.99:
+                raise ValidationError(f"{field_name} must be between 0 and 999.99.")
+            
             # Round to 2 decimal places
-            right_arm = round(Decimal(right_arm), 2)
-        return right_arm
+            value = round(value, 2)
+
+        return value
 
     def clean_unit(self):
         unit = self.cleaned_data.get('unit')
