@@ -21,14 +21,15 @@ Welcome to FitLife, a web application designed to help users achieve their fitne
 ## ensure you have the following installed:
 
 - Anaconda (for managing virtual environments).
-- Python 3.10
+- Python 3.12
 - MongoDB (for database management).
 
 ### Steps to set up and run FitLife:
 
 1- Clone the repository
--from you temrinal using the command
-git clone https://github.com/Maryam308/FitLife-Project.git - or navigate to https://github.com/Maryam308/FitLife-Project/tree/main click the green code button and select download ZIP
+-from your terminal using the command 
+git clone https://github.com/Maryam308/FitLife.git
+click the green code button and select download ZIP
 
 2- Create a database for the project called FitLife
 in mongo db compass: connect to your local connection then click create database and enter FitLife as the database name and any collection name in the collection name field
@@ -46,7 +47,7 @@ pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 
-7- Populate the Database with Sample Dat
+7- Populate the Database with Sample Data
 2 ways to do this: - using mongodb compass: navigate to the workouts collection, click add data -> import JSON or csv file then choose "workouts.json" which is located in FitLife-Project/JSON Data - using the CLI: mongoimport --db FitLife --collection [collection name] --file "[JSON file path]"
 
 For classes_fitnessclass collection:
@@ -54,6 +55,7 @@ mongoimport --db FitLife --collection classes_fitnessclass --file "[json file pa
 
 For workouts_workout collection:
 mongoimport --db FitLife --collection workouts_workout --file "[json file path]"
+
 
 8- Create an Admin User
 python manage.py createsuperuser
@@ -83,3 +85,5 @@ pip freeze > requirements.txt
 
     e.g:
     python manage.py runserver 8080
+
+
