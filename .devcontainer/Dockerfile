@@ -19,8 +19,9 @@ RUN mkdir -p /data/db /var/lib/mongodb && chown -R mongodb:mongodb /data/db /var
 # Start MongoDB during the build process to avoid errors on first run
 RUN mongod --dbpath /var/lib/mongodb --fork --logpath /var/log/mongodb.log || echo "MongoDB already running"
 
-# Expose MongoDB port
+# Expose MongoDB and Django ports
 EXPOSE 27017
+EXPOSE 8000
 
 # Set the working directory
 WORKDIR /workspace
